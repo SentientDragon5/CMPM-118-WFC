@@ -1,3 +1,29 @@
-[gd_scene format=3 uid="uid://cv6cqs08jrbfc"]
+[gd_scene load_steps=6 format=3 uid="uid://cv6cqs08jrbfc"]
+
+[ext_resource type="Texture2D" uid="uid://dyq6kkocuhutk" path="res://tilesets/corners_n_crossings/tileset_atlas.png" id="1_psh50"]
+[ext_resource type="Script" path="res://wfc.gd" id="2_5g2bi"]
+[ext_resource type="Script" path="res://WFC_Tiled_Model.gd" id="2_yp5mr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2qah3"]
+texture = ExtResource("1_psh50")
+0:0/0 = 0
+1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_64sqx"]
+sources/0 = SubResource("TileSetAtlasSource_2qah3")
 
 [node name="Node2D" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_64sqx")
+
+[node name="WFC" type="Node" parent="." node_paths=PackedStringArray("model")]
+script = ExtResource("2_5g2bi")
+model = NodePath("corners_n_crossings_model")
+
+[node name="corners_n_crossings_model" type="Node" parent="WFC"]
+script = ExtResource("2_yp5mr")
+final_width = 16
+final_height = 16
