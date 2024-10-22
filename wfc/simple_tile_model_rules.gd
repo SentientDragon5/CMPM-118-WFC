@@ -4,9 +4,6 @@ class_name Tiled_Rules extends Resource
 @export var tiles : Array[Dictionary]; #{ name:"bridge", symmetry:"I" }
 @export var neighbors : Array[Dictionary]; #{ left:"bridge 1", right:"river 1" }
 		
-
-	
-
 #Example from json
 #module.exports = {
 	#path: './data/castle/',

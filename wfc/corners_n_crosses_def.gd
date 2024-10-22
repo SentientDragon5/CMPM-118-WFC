@@ -2,12 +2,14 @@ class_name t1 extends Tiled_Rules
 
 func _init() -> void:
 	tilesize = 16;
+	tileset = preload("res://tilesets/corners_n_crossings/CCTileset.tres");
 	
 	tiles = [
-		{"name":"corner", "symmetry":"L"},
-		{"name":"cross", "symmetry":"X"},
-		{"name":"blank", "symmetry":"X"},
-		{"name":"straight", "symmetry":"I"}
+		{"name":"corner", "symmetry":"L", "atlas_coords": Vector2(0, 0)},
+		{"name":"cross", "symmetry":"X", "atlas_coords": Vector2(1, 0)},
+		{"name":"blank", "symmetry":"X", "atlas_coords": Vector2(0, 1)},
+		{"name":"straight", "symmetry":"I", "atlas_coords": Vector2(1,1)},
+		{"name":"Debug", "symmetry":"F", "atlas_coords": Vector2(2,0)}
 	];
 
 	neighbors = [

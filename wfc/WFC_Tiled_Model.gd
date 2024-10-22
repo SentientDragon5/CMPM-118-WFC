@@ -4,7 +4,8 @@ class_name  Tiled_Model extends Node #Generates the rules for a tiled definition
 @export var final_width : int;
 @export var final_height : int;
 var directions : int = 4;
-var tiles : Array[int]; #This will eventually be the array that holds the raw tile data, whether that is tile images, bitmap data, ehwtaver
+#Tiles are currently in form [Vector2(Atlas Coords), Cardinality]
+var tiles : Array; #This will eventually be the array that holds the raw tile data, whether that is tile images, bitmap data, ehwtaver
 var num_patterns : int;
 var weights: Array[float];
 
@@ -97,6 +98,7 @@ func generate_model_rules() -> void:
 		#Create mappings for each cardinal tile
 		#Array is in form cardinal_tile_mappings[tile][CARDINALITY], which gives the tile id of the cardinality from tile
 		for c in cardinality:
+			tiles.push_back([currentTile["atlas_coords"], c]);
 			cardinal_tile_mappings.push_back([
 				parent_tile_id + c, #id of self
 				parent_tile_id + rotation_mapping_func.call(c), #id of 1 rotation
@@ -169,7 +171,10 @@ func generate_model_rules() -> void:
 				
 				propagator[d][p1] = rule_list;
 	pass;
-				
+	
+func on_boundary(x:int, y:int) -> bool: #returns true if the x, y tile is oob
+	return (x < 0 || y < 0 || x >= final_width || y >= final_height);
+	
 func log_debug_info():
 	assert(propagator.size() > 0);
 	print_debug("Start log: Propagator");
@@ -187,7 +192,4 @@ func log_debug_info():
 			print_debug("Tile: " + tile_name_of[p1] + " can be adjacent to:");
 			for p2 in propagator[d][p1]:
 				print_debug(tile_name_of[p2]);
-	pass
-	
-func on_boundary(x:int, y:int) -> bool: #returns true if the x, y tile is oob
-	return (x < 0 || y < 0 || x >= final_width || y >= final_height);
+	Global._draw_debug_tiles(tiles);

@@ -14,3 +14,13 @@ config/name="WFC"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://wfcicon.png"
+
+[autoload]
+
+Global="*res://global.gd"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/stretch/mode="viewport"
