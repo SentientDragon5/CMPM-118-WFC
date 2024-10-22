@@ -4,7 +4,7 @@ extends Node #Does the wfc
 
 func _ready() -> void:
 	model.model_generated.connect(pre_initialize);
-	model.generate_model_rules();
+	model.setup();
 
 
 func generate_mapping() -> bool:
@@ -18,7 +18,7 @@ var fmx = 0
 var fmy = 0
 var fmx_x_fmy = 0
 var t = 0;
-var n = 0
+var n = 0;
 var initialized_field = false;
 var generation_complete = false;
 
@@ -56,7 +56,7 @@ func pre_initialize(iterations: int, rng : RandomNumberGenerator) -> void:
 
 func initialize():
 	distribution = []; # of t length
-	distribution.resize(fmx_x_fmy);
+	distribution.resize(model.num_patterns);
 	wave = []; # of fmx_x_fmy len
 	compatible = []; # of fmx_x_fmy len
 	
@@ -75,7 +75,7 @@ func initialize():
 	sum_of_weight_log_weights = 0;
 	
 	for _t in range(t):
-		weight_log_weights.append(weights[_t] * log(weights[_t]))
+		weight_log_weights[_t] = (weights[_t] * log(weights[_t]))
 		sum_of_weights += weights[_t];
 		sum_of_weight_log_weights += weight_log_weights[_t];
 		
@@ -95,6 +95,7 @@ func initialize():
 	stack_size = 0;
 
 func observe(rng : RandomNumberGenerator):
+	print_debug("Iteration: Observe");
 	var min_noise = 1000;
 	var argmin = -1;
 	for i in range(fmx_x_fmy):
@@ -112,6 +113,7 @@ func observe(rng : RandomNumberGenerator):
 	# search for the minimum entropy.
 	if argmin == -1:
 		observed = []
+		observed.resize(fmx_x_fmy);
 		for i in range(fmx_x_fmy):
 			for _t in range(t):
 				if wave[i][_t]:
@@ -121,11 +123,10 @@ func observe(rng : RandomNumberGenerator):
 	
 	for _t in range(t):
 		distribution[_t] = weights[_t] if wave[argmin][_t] else 0;
-	#var r = randomIndice(distribution, rng())
-	var r = 0 # REPLACE
+	var r = randomIndice(distribution, rng);
 	var w = wave[argmin];
 	for _t in range(t):
-		if w[_t] != (t==r):
+		if w[_t] != (_t==r):
 			ban(argmin, _t)
 	return null;
 
@@ -187,7 +188,9 @@ func iterate(iterations : int, rng) -> bool:
 	while i < iterations || iterations == 0:
 		var result = singleIteration(rng)
 		if result != null:
+			print_debug(result);
 			return result
+	print_debug("Finished.");
 	return true
 	
 func generate():
@@ -229,4 +232,22 @@ func clear():
 	
 	initialized_field = true
 	generation_complete = false
+	
+func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
+	var r : float = rng.randf_range(0, 1);
+	var sum : float = 0;
+	var x : float = 0;
+	var i : int = 0;
+	
+	for num in distrib:
+		sum += num;
+
+	r *= sum;
+
+	while (r != 0 and i < distrib.size()):
+		x += distrib[i];
+		if (r <= x):
+			return i;
+		i+=1;
+	return 0;
 	

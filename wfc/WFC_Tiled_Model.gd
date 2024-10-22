@@ -16,9 +16,12 @@ enum DIRECTIONS {LEFT, DOWN, RIGHT, UP};
 
 signal model_generated;
 
-func _ready() -> void:
+func setup() -> void:
 	generate_model_rules();
-	
+	#log_debug_info();
+	var rng : RandomNumberGenerator = RandomNumberGenerator.new();
+	rng.seed = hash("WORK PLEASE");
+	model_generated.emit(0, rng);
 var cardinal_tile_mappings : Array = [];
 var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
 var tile_name_of : Array = [];
@@ -105,7 +108,6 @@ func generate_model_rules() -> void:
 				parent_tile_id + reflection_mapping_func.call(rotation_mapping_func.call(rotation_mapping_func.call(rotation_mapping_func.call(c)))), #refl of 3 rot
 			]);
 			tile_name_of.push_back(currentTile.name + str(c));
-		#TODO: add tiles array stuff
 		
 		#Add weights
 		for c in cardinality:
@@ -166,9 +168,6 @@ func generate_model_rules() -> void:
 						rule_list.append(p2);
 				
 				propagator[d][p1] = rule_list;
-	var rng : RandomNumberGenerator = RandomNumberGenerator.new();
-	rng.seed = hash("WORK PLEASE");
-	model_generated.emit(0, rng);
 	pass;
 				
 func log_debug_info():
