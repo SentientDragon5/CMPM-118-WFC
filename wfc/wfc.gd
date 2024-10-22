@@ -53,6 +53,7 @@ func pre_initialize(iterations: int, rng : RandomNumberGenerator) -> void:
 	
 	weights = model.weights;
 	iterate(iterations, rng);
+	draw();
 
 func initialize():
 	distribution = []; # of t length
@@ -117,7 +118,7 @@ func observe(rng : RandomNumberGenerator):
 		for i in range(fmx_x_fmy):
 			for _t in range(t):
 				if wave[i][_t]:
-					observed[i] = t;
+					observed[i] = _t;
 					break;
 		return true;
 	
@@ -250,4 +251,12 @@ func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
 			return i;
 		i+=1;
 	return 0;
+	
+func draw():
+	for i in range(16):
+		for j in range(16):
+			var text = RichTextLabel.new();
+			text.position = Vector2(i * 8, j * 8);
+			text.text = str(observed[i + j * 16]);
+			get_tree().get_root().call_deferred("add_child", text);
 	
