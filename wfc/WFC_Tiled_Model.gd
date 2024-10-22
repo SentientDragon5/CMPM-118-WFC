@@ -1,4 +1,4 @@
-extends Node #Generates the rules for a tiled definition
+class_name  Tiled_Model extends Node #Generates the rules for a tiled definition
 #Start with abstract representation
 @export var rules_definition : Tiled_Rules = t1.new(); #work on better way to do this
 @export var final_width : int;
@@ -14,12 +14,10 @@ enum NEIGHBOR {NAME, ROTATIONS};
 enum CARDINALITY {SAME, ONE_ROTA, TWO_ROTA, THREE_ROTA, REFL, ONE_ROTA_REFL, TWO_ROTA_REFL, THREE_ROTA_REFL};
 enum DIRECTIONS {LEFT, DOWN, RIGHT, UP};
 
+signal model_generated;
 
 func _ready() -> void:
 	generate_model_rules();
-	#generate_mapping();
-	#validate();
-	#log_debug_info();
 	
 var cardinal_tile_mappings : Array = [];
 var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
@@ -168,6 +166,9 @@ func generate_model_rules() -> void:
 						rule_list.append(p2);
 				
 				propagator[d][p1] = rule_list;
+	var rng : RandomNumberGenerator = RandomNumberGenerator.new();
+	rng.seed = hash("WORK PLEASE");
+	model_generated.emit(0, rng);
 	pass;
 				
 func log_debug_info():

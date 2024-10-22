@@ -1,12 +1,11 @@
 extends Node #Does the wfc
 
-@export var model : Node;
+@export var model : Tiled_Model;
 
 func _ready() -> void:
-	#generate_mapping();
-	#validate();
-	#log_debug_info();
-	pass;
+	model.model_generated.connect(pre_initialize);
+	model.generate_model_rules();
+
 
 func generate_mapping() -> bool:
 	return true;
@@ -36,7 +35,6 @@ var sums_of_weights = null;
 var sums_of_weights_log_weights = null;
 var entropies = null;
 
-var propagator = null;
 var observed = null;
 var distribution = null;
 
@@ -47,8 +45,18 @@ var dx = [-1,0,1,0];
 var dy = [0,1,0,-1];
 var opposite = [2,3,0,1];
 
+func pre_initialize(iterations: int, rng : RandomNumberGenerator) -> void:
+	fmx = model.final_width;
+	fmy = model.final_height;
+	fmx_x_fmy = fmx * fmy;
+	t = model.num_patterns;
+	
+	weights = model.weights;
+	iterate(iterations, rng);
+
 func initialize():
 	distribution = []; # of t length
+	distribution.resize(fmx_x_fmy);
 	wave = []; # of fmx_x_fmy len
 	compatible = []; # of fmx_x_fmy len
 	
@@ -56,7 +64,8 @@ func initialize():
 		wave.append([])
 		compatible.append([])
 		for _t in t:
-			wave[i].append(0)
+			wave[i].append([]);
+			wave[i].resize(t);
 			compatible[i].append([0,0,0,0])
 	
 	weight_log_weights = []
@@ -67,10 +76,10 @@ func initialize():
 	
 	for _t in range(t):
 		weight_log_weights.append(weights[_t] * log(weights[_t]))
-		sums_of_weights += weights[_t];
-		sums_of_weights_log_weights += weight_log_weights[_t];
+		sum_of_weights += weights[_t];
+		sum_of_weight_log_weights += weight_log_weights[_t];
 		
-	starting_entropy = log(sums_of_weights) - sums_of_weights_log_weights / sums_of_weights
+	starting_entropy = log(sum_of_weights) - sum_of_weight_log_weights / sum_of_weights
 	
 	sums_of_ones = []
 	sums_of_weights = []
@@ -85,8 +94,8 @@ func initialize():
 	stack = []
 	stack_size = 0;
 
-func observe(rng : RandomNumberGenerator) -> bool:
-	var min = 1000;
+func observe(rng : RandomNumberGenerator):
+	var min_noise = 1000;
 	var argmin = -1;
 	for i in range(fmx_x_fmy):
 		if model.on_boundary(i % fmx, i / fmx | 0):
@@ -95,10 +104,10 @@ func observe(rng : RandomNumberGenerator) -> bool:
 		if amount == 0:
 			return false;
 		var entropy = entropies[i]
-		if amount>1 && entropy <= min:
+		if amount>1 && entropy <= min_noise:
 			var noise = 0.000001 * rng.randf_range(0,1); # DOUBLE CHECK
-			if entropy + noise < min:
-				min = entropy + noise;
+			if entropy + noise < min_noise:
+				min_noise = entropy + noise;
 				argmin = i;
 	# search for the minimum entropy.
 	if argmin == -1:
@@ -117,13 +126,13 @@ func observe(rng : RandomNumberGenerator) -> bool:
 	var w = wave[argmin];
 	for _t in range(t):
 		if w[_t] != (t==r):
-			ban(argmin, t)
-	return false
+			ban(argmin, _t)
+	return null;
 
 func propagate():
 	while stack_size > 0:
-		var e1 = stack[stack_size-1]
-		stack_size-=1
+		var e1 = stack.pop_front();
+		stack_size-=1;
 		
 		var i1 = e1[0]
 		var x1 = i1 % fmx
@@ -148,10 +157,10 @@ func propagate():
 				y2 -=fmy
 				
 			var i2 = x2 + y2 * fmx
-			var p = propagator[d][e1[1]]
+			var p = model.propagator[d][e1[1]]
 			var compat = compatible[i2]
 			
-			for l in range(p):
+			for l in range(p.size()):
 				var t2 = p[l]
 				var comp = compat[t2]
 				comp[d]-=1
@@ -161,12 +170,12 @@ func propagate():
 func singleIteration(rng : RandomNumberGenerator):
 	var result = observe(rng)
 	if result != null:
-		generation_complete = result
-		return result
-	propagate()
-	return null
+		generation_complete = result;
+		return result;
+	propagate();
+	return null;
 	
-func iterate(iterations, rng) -> bool:
+func iterate(iterations : int, rng) -> bool:
 	if wave == null:
 		initialize()
 	if !initialized_field:
@@ -197,7 +206,7 @@ func ban(i,_t):
 		comp[d] = 0;
 	wave[i][_t] = false
 	
-	stack[stack_size] = [i,t]
+	stack.push_back([i,_t]);
 	stack_size+=1
 	
 	sums_of_ones[i] -= 1;
@@ -212,10 +221,10 @@ func clear():
 		for _t in range(t):
 			wave[i][_t] = true
 			for d in range(4):
-				compatible[i][t][d] = propagator[opposite[d]][_t].length;
-		sums_of_ones[i] = weights.lenths;
+				compatible[i][_t][d] = model.propagator[opposite[d]][_t].size();
+		sums_of_ones[i] = weights.size();
 		sums_of_weights[i] = sum_of_weights;
-		sums_of_weights_log_weights = sum_of_weight_log_weights;
+		sums_of_weights_log_weights[i] = sum_of_weight_log_weights;
 		entropies[i] = starting_entropy
 	
 	initialized_field = true
