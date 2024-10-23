@@ -8,8 +8,8 @@ func _init() -> void:
 		{"name":"corner", "symmetry":"L", "atlas_coords": Vector2(0, 0)},
 		{"name":"cross", "symmetry":"X", "atlas_coords": Vector2(1, 0)},
 		{"name":"blank", "symmetry":"X", "atlas_coords": Vector2(0, 1)},
-		{"name":"straight", "symmetry":"I", "atlas_coords": Vector2(1,1)},
-		{"name":"Debug", "symmetry":"F", "atlas_coords": Vector2(2,0)}
+		{"name":"straight", "symmetry":"I", "atlas_coords": Vector2(1,1)}
+		#{"name":"Debug", "symmetry":"F", "atlas_coords": Vector2(2,0)}
 	];
 
 	neighbors = [

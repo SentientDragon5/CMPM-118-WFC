@@ -119,12 +119,12 @@ func observe(rng : RandomNumberGenerator):
 			for _t in range(t):
 				if wave[i][_t]:
 					observed[i] = _t;
-					break;
 		return true;
 	
 	for _t in range(t):
 		distribution[_t] = weights[_t] if wave[argmin][_t] else 0;
 	var r = randomIndice(distribution, rng);
+	print_debug(r)
 	var w = wave[argmin];
 	for _t in range(t):
 		if w[_t] != (_t==r):

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=4 uid="uid://cv6cqs08jrbfc"]
 
-[ext_resource type="TileSet" uid="uid://6pxqm3415ctv" path="res://tilesets/corners_n_crossings/CCTileset.tres" id="1_rbg5h"]
+[ext_resource type="TileSet" uid="uid://bu8mq63efe0fa" path="res://tilesets/corners_n_crossings/CCTileset.tres" id="1_rbg5h"]
 [ext_resource type="Script" path="res://wfc.gd" id="2_5g2bi"]
 [ext_resource type="Script" path="res://WFC_tile_map_layer.gd" id="2_jy0ux"]
 [ext_resource type="Script" path="res://WFC_Tiled_Model.gd" id="2_yp5mr"]
@@ -9,6 +9,7 @@
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAABAAAAAAAAAAEAAAAAAAAAAAABAAEAAAABAAEAAGAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAGAAAAMAAAAAAAAAAAABAAMAAAAAAAAAADAAAAQAAAAAAAAAAGABAAQAAAAAAAEAAAAAAAUAAAAAAAAAAGABAAUAAAABAAEAAAAAAAYAAAAAAAAAAGABAAYAAAAAAAAAAAABAAcAAAAAAAAAAFAAAAcAAAAAAAAAAGAAAAgAAAAAAAAAADABAAgAAAAAAAEAAAAAAAkAAAAAAAAAADABAAkAAAABAAEAAAAAAAoAAAAAAAAAADAAAAsAAAAAAAAAADABAAoAAAAAAAAAAAABAAsAAAAAAAAAAFA=")
 tile_set = ExtResource("1_rbg5h")
 script = ExtResource("2_jy0ux")
