@@ -255,8 +255,8 @@ func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
 func draw():
 	for i in range(16):
 		for j in range(16):
-			var text = RichTextLabel.new();
-			text.position = Vector2(i * 8, j * 8);
+			var text = Label.new();
+			text.position = Vector2(i * 16, j * 16);
 			text.text = str(observed[i + j * 16]);
 			get_tree().get_root().call_deferred("add_child", text);
 	
