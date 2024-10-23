@@ -30,5 +30,6 @@ func _draw_debug_tiles(tiles : Array) -> void:
 				cardinality = TileSetAtlasSource.TRANSFORM_FLIP_V
 			7: 
 				cardinality = TileSetAtlasSource.TRANSFORM_TRANSPOSE
+		print_debug(cardinality);
 		test_tilemap.set_cell(Vector2(0, posX), 0, tile[0], cardinality);
 		posX += 1;
