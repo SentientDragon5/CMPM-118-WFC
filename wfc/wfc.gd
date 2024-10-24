@@ -3,12 +3,9 @@ extends Node #Does the wfc
 @export var model : Tiled_Model;
 
 func _ready() -> void:
-	#return;
+	return;
 	model.model_generated.connect(pre_initialize);
 	model.setup();
-
-func generate_mapping() -> bool:
-	return true;
 
 # not defined?
 var weights: Array[float] = [];
@@ -26,10 +23,10 @@ var generation_complete: bool = false;
 var wave = null; #Actually Array[Array[bool]] (cant check, blame GDScript)
 var compatibility_matrix = null; #Actually Array[Array[Array[int]]] (cant check, blame GDScript)
 var log_weighted_sums: Array[float] = [];
-var total_log_weighted_sums: int = 0;
-var total_weights: int = 0;
+var total_log_weighted_sums: float = 0;
+var total_weights: float = 0;
 
-var initial_entropy: int = 0;
+var initial_entropy: float = 0;
 
 # Arrays that keep track of data for each tile
 var tile_possible_pattern_count: Array[int] = [];
@@ -48,18 +45,19 @@ const DX: Array[int] = [-1,0,1,0];
 const DY: Array[int] = [0,1,0,-1];
 const OPPOSITE: Array[int] = [2,3,0,1];
 
-func pre_initialize(iterations: int, rng : RandomNumberGenerator) -> void:
+func pre_initialize(rng : RandomNumberGenerator) -> void:
 	image_width_tiles = model.final_width;
 	image_height_tiles = model.final_height;
 	total_tile_count = image_width_tiles * image_height_tiles;
 	total_pattern_count = model.num_patterns;
 
 	weights = model.weights;
-	iterate(iterations, rng);
-	drawTiles();
-	#draw();
+	
+	if !!generate(rng):
+		drawTiles();
 
-func initialize():
+
+func initialize() -> void:
 	possible_pattern_weights = []; # of t length
 	possible_pattern_weights.resize(model.num_patterns);
 	wave = []; # of fmx_x_fmy len
@@ -104,6 +102,7 @@ func observe(rng : RandomNumberGenerator):
 	var min_noise = 1000;
 	var argmin = -1;
 	for i in range(total_tile_count):
+		@warning_ignore("integer_division")
 		if model.on_boundary(i % image_width_tiles, i / image_width_tiles | 0):
 			continue;
 		var amount = tile_possible_pattern_count[i];
@@ -126,7 +125,7 @@ func observe(rng : RandomNumberGenerator):
 		return true;
 
 	for _t in range(total_pattern_count):
-		possible_pattern_weights[_t] = weights[_t] if wave[argmin][_t] else 0;
+		possible_pattern_weights[_t] = weights[_t] if wave[argmin][_t] else 0.0;
 	var r = randomIndice(possible_pattern_weights, rng);
 	var w = wave[argmin];
 	for _t in range(total_pattern_count):
@@ -134,7 +133,7 @@ func observe(rng : RandomNumberGenerator):
 			ban(argmin, _t);
 	return null;
 
-func propagate():
+func propagate() -> void:
 	while stack_size > 0:
 		var tile_element = stack.pop_front();
 		stack_size-=1;
@@ -195,8 +194,9 @@ func iterate(iterations : int, rng) -> bool:
 			return result;
 	return true;
 
-func generate():
-	var rng = RandomNumberGenerator.new();
+func generate(rng : RandomNumberGenerator):
+	if rng == null:
+		rng = RandomNumberGenerator.new();
 	if wave == null:
 		initialize();
 	clear();
@@ -206,7 +206,7 @@ func generate():
 			return result;
 	return false;
 
-func ban(i,_t):
+func ban(i,_t) -> void:
 	var comp = compatibility_matrix[i][_t];
 	for d in range(4):
 		comp[d] = 0;
@@ -222,7 +222,7 @@ func ban(i,_t):
 	var sum = tile_total_pattern_weights[i];
 	tile_pattern_entropies[i] = log(sum) - tile_pattern_log_weight_sums[i] / sum;
 
-func clear():
+func clear() -> void:
 	for i in range(total_tile_count):
 		for _t in range(total_pattern_count):
 			wave[i][_t] = true;
@@ -253,8 +253,14 @@ func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
 			return index;
 		index+=1;
 	return 0;
+	
+	
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("Refresh"):
+		var new_rng = RandomNumberGenerator.new();
+		pre_initialize(new_rng);
 
-func drawTileIDs():
+func drawTileIDs() -> void:
 	for i in range(16):
 		for j in range(16):
 			var text = Label.new();
@@ -263,7 +269,7 @@ func drawTileIDs():
 			get_tree().get_root().call_deferred("add_child", text);
 
 
-func drawTiles():
+func drawTiles() -> void:
 	var tilemap = Global.test_tilemap;
 
 	var cardinality_transformations: Dictionary = {

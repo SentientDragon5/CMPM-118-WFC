@@ -22,7 +22,7 @@ func setup() -> void:
 	#log_debug_info();
 	var rng : RandomNumberGenerator = RandomNumberGenerator.new();
 	rng.seed = hash("WORK PLEASE") * randi_range(0, 6969);
-	model_generated.emit(0, rng);
+	model_generated.emit(rng);
 var cardinal_tile_mappings : Array = [];
 var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
 var tile_name_of : Array = [];

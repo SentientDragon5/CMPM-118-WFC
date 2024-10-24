@@ -15,6 +15,7 @@ tile_set = ExtResource("1_rbg5h")
 script = ExtResource("2_jy0ux")
 
 [node name="WFC" type="Node" parent="." node_paths=PackedStringArray("model")]
+unique_name_in_owner = true
 script = ExtResource("2_5g2bi")
 model = NodePath("corners_n_crossings_model")
 

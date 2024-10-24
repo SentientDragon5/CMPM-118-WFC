@@ -13,7 +13,7 @@ var tiles : Array; #This will eventually be the array that holds the raw tile da
 var num_patterns : int;
 var input_width : int = 3;
 var input_height : int = 3;
-var size_of_pattern : Vector2 = Vector2 (2, 2);
+var size_of_pattern : Vector2 = Vector2 (2, 2); #currently requires x == y
 var weights: Array[float];
 
 var sample : Array = [];
@@ -26,9 +26,42 @@ enum DIRECTIONS {LEFT, DOWN, RIGHT, UP};
 signal model_generated;
 
 func _ready() -> void:
-	return
+	#return
+	var test_arr = [];
+	test_arr.resize(3);
+	var count = 0
+	for i in 3:
+		test_arr[i] = [];
+		test_arr[i].resize(3);
+		for j in 3:
+			test_arr[i][j] = count;
+			count += 1;
+	print_debug(test_arr[0][1])
 	generate_sample();
-
+	print_debug(sample[0][1]);
+	
+#REFACTOR LATER--Patterns---------------------------------------------
+var pattern : Callable = func pattern(pattern_func : Callable) -> Array:
+	var result : Array = [];
+	result.resize(size_of_pattern.x)
+	for i in size_of_pattern.x:
+		result[i] = []
+		result[i].resize(size_of_pattern.y);
+	for i in size_of_pattern.x:
+		for j in size_of_pattern.y:
+			result[i][j] = pattern_func.call(i, j);
+	return result;
+	
+var patternFromSample : Callable = func patternFromSample(x : int, y : int):
+	return pattern.call(func(dx : int, dy : int):
+		return sample[(x+dx) % input_width][(y+dy) % input_height]
+		); 
+		
+var rotate_pattern = func rotate(p : Array):
+	return pattern.call(func(x : int, y : int):
+		return p[y][size_of_pattern.x - x - 1];
+	);
+#--------------------------------------------------------------------------
 func setup() -> void:
 	generate_model_rules();
 	#log_debug_info();
@@ -183,7 +216,7 @@ func generate_model_rules() -> void:
 	pass;
 	
 var bitmask_base : int;
-var bitmask_size : int;
+var bitmask_size : float;
 	
 func generate_sample() -> void: #lowkey don't know if I actually need all this
 	sample.resize(input_width);
@@ -193,7 +226,7 @@ func generate_sample() -> void: #lowkey don't know if I actually need all this
 		for j in input_height:
 			#[(x, y)atlas coords, cardinality]
 			var cur_tile : Array = [rules_definition.get_cell_atlas_coords(Vector2(i, j)), alt_to_card(rules_definition.get_cell_alternative_tile(Vector2(i, j)))];
-			var cur_index : String = str(cur_tile[0].x)+str(cur_tile[0].y)+str(cur_tile[1]);
+			var cur_index : String = str(cur_tile[0].x)+str(cur_tile[0].y)+str(cur_tile[1]); #index as string
 			if !tile_index.has(cur_index):
 				tile_index[cur_index] = tiles.size();
 				tiles.push_back(cur_tile);
