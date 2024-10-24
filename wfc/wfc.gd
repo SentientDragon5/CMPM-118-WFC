@@ -53,7 +53,8 @@ func pre_initialize(iterations: int, rng : RandomNumberGenerator) -> void:
 	
 	weights = model.weights;
 	iterate(iterations, rng);
-	draw();
+	drawTiles();
+	#draw();
 
 func initialize():
 	distribution = []; # of t length
@@ -96,7 +97,6 @@ func initialize():
 	stack_size = 0;
 
 func observe(rng : RandomNumberGenerator):
-	print_debug("Iteration: Observe");
 	var min_noise = 1000;
 	var argmin = -1;
 	for i in range(fmx_x_fmy):
@@ -124,7 +124,7 @@ func observe(rng : RandomNumberGenerator):
 	for _t in range(t):
 		distribution[_t] = weights[_t] if wave[argmin][_t] else 0;
 	var r = randomIndice(distribution, rng);
-	print_debug(r)
+	#print_debug(r)
 	var w = wave[argmin];
 	for _t in range(t):
 		if w[_t] != (_t==r):
@@ -260,3 +260,27 @@ func draw():
 			text.text = str(observed[i + j * 16]);
 			get_tree().get_root().call_deferred("add_child", text);
 	
+
+func drawTiles():
+	var tilemap = Global.test_tilemap;
+	
+	var cardinalityTransformations = {
+		1: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V,
+		2: TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
+		3: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H,
+		4: TileSetAtlasSource.TRANSFORM_FLIP_H,
+		5: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
+		6: TileSetAtlasSource.TRANSFORM_FLIP_V,
+		7: TileSetAtlasSource.TRANSFORM_TRANSPOSE
+	}
+	
+	var currentIndex = 0;
+	
+	for tileY in range(model.final_width):
+		for tileX in range (model.final_height):
+			var tileData = model.tiles[observed[currentIndex]];
+			var transform = cardinalityTransformations.get(tileData[1], 0);
+			
+			tilemap.set_cell(Vector2i(tileX, tileY), 0, tileData[0], transform)
+			currentIndex += 1;
+			

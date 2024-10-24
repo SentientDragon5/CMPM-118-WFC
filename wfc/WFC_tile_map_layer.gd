@@ -13,6 +13,6 @@ func _ready() -> void:
 	#2 rot refl TileSetAtlasSource.TRANSFORM_FLIP_V
 	#3 rot refl TileSetAtlasSource.TRANSFORM_TRANSPOSE
 
-	set_cell(Vector2(0, 0), 0, Vector2(2, 0));
+	#set_cell(Vector2(0, 0), 0, Vector2(2, 0));
 	#tile = get_cell_tile_data(Vector2(0, 0));
 	#print_debug(tile);
