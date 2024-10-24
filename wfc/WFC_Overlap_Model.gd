@@ -1,14 +1,22 @@
-class_name  Tiled_Model extends Node #Generates the rules for a tiled definition
+class_name  Overlap_Model extends Node #Generates the rules for a tiled definition
 #Start with abstract representation
-@export var rules_definition : Tiled_Rules = t1.new(); #work on better way to do this
+@export var rules_definition : TileMapLayer; #work on better way to do this
 @export var final_width : int;
 @export var final_height : int;
 var directions : int = 4;
+var periodic : bool = false;
+#Tile as key "x-y-card" with value index id in tiles
+var tile_index : Dictionary;
 #Tiles are currently in form [Vector2(Atlas Coords), Cardinality]
-var tiles : Array;
+var tiles : Array; #This will eventually be the array that holds the raw tile data, whether that is tile images, bitmap data, ehwtaver
+#For readability I'm gonna make patterns 2d arrays
 var num_patterns : int;
+var input_width : int = 3;
+var input_height : int = 3;
+var size_of_pattern : Vector2 = Vector2 (2, 2);
 var weights: Array[float];
 
+var sample : Array = [];
 var propagator : Array = [];
 
 enum NEIGHBOR {NAME, ROTATIONS};
@@ -17,21 +25,23 @@ enum DIRECTIONS {LEFT, DOWN, RIGHT, UP};
 
 signal model_generated;
 
+func _ready() -> void:
+	return
+	generate_sample();
+
 func setup() -> void:
 	generate_model_rules();
 	#log_debug_info();
 	var rng : RandomNumberGenerator = RandomNumberGenerator.new();
-	rng.seed = hash("WORK PLEASE") * randi_range(0, 6969);
+	rng.seed = hash("WORK PLEASE");
 	model_generated.emit(0, rng);
 var cardinal_tile_mappings : Array = [];
 var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
 var tile_name_of : Array = [];
 
 func generate_model_rules() -> void:
-	#periodicity?
-	#unique tiles?
-	#subsets?
 	#conversion from raw data to tiling for game
+	generate_sample();
 
 	var rotation_mapping_func : Callable; #function to get a single rotation for the mapping
 	var reflection_mapping_func : Callable;#function to get a refl for the mapping
@@ -172,8 +182,46 @@ func generate_model_rules() -> void:
 				propagator[d][p1] = rule_list;
 	pass;
 	
+var bitmask_base : int;
+var bitmask_size : int;
+	
+func generate_sample() -> void: #lowkey don't know if I actually need all this
+	sample.resize(input_width);
+	for i in input_width:
+		sample[i] = [];
+		sample[i].resize(input_height);
+		for j in input_height:
+			#[(x, y)atlas coords, cardinality]
+			var cur_tile : Array = [rules_definition.get_cell_atlas_coords(Vector2(i, j)), alt_to_card(rules_definition.get_cell_alternative_tile(Vector2(i, j)))];
+			var cur_index : String = str(cur_tile[0].x)+str(cur_tile[0].y)+str(cur_tile[1]);
+			if !tile_index.has(cur_index):
+				tile_index[cur_index] = tiles.size();
+				tiles.push_back(cur_tile);
+			sample[i][j] = cur_tile;
+	bitmask_base = tiles.size();
+	bitmask_size = pow(bitmask_base, size_of_pattern.x * size_of_pattern.y);
+			
+func alt_to_card(alt_id : int) -> int:
+	match  alt_id:
+		TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V:
+			return 1;
+		TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V:
+			return 2;
+		TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H:
+			return 3;
+		TileSetAtlasSource.TRANSFORM_FLIP_H:
+			return 4;
+		TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V:
+			return 5;
+		TileSetAtlasSource.TRANSFORM_FLIP_V:
+			return 6;
+		TileSetAtlasSource.TRANSFORM_TRANSPOSE:
+			return 7;
+		_:
+			return 0
+	
 func on_boundary(x:int, y:int) -> bool: #returns true if the x, y tile is oob
-	return (x < 0 || y < 0 || x >= final_width || y >= final_height);
+	return !periodic && (x < 0 || y < 0 || x + size_of_pattern.x >= final_width || y + size_of_pattern.y >= final_height);
 	
 func log_debug_info():
 	assert(propagator.size() > 0);

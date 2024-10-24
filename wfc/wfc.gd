@@ -3,14 +3,10 @@ extends Node #Does the wfc
 @export var model : Tiled_Model;
 
 func _ready() -> void:
+	#return;
 	model.model_generated.connect(pre_initialize);
 	model.setup();
 
-
-func generate_mapping() -> bool:
-	return true;
-
-# not defined?
 var weights = []
 
 
@@ -100,7 +96,8 @@ func observe(rng : RandomNumberGenerator):
 	var min_noise = 1000;
 	var argmin = -1;
 	for i in range(fmx_x_fmy):
-		if model.on_boundary(i % fmx, i / fmx | 0):
+		@warning_ignore("integer_division")
+		if model.on_boundary(i % fmx, (i / fmx)):
 			continue;
 		var amount = sums_of_ones[i];
 		if amount == 0:
@@ -124,7 +121,6 @@ func observe(rng : RandomNumberGenerator):
 	for _t in range(t):
 		distribution[_t] = weights[_t] if wave[argmin][_t] else 0;
 	var r = randomIndice(distribution, rng);
-	#print_debug(r)
 	var w = wave[argmin];
 	for _t in range(t):
 		if w[_t] != (_t==r):

@@ -1,10 +1,11 @@
 extends TileMapLayer
 
 var tileset : TileSet = self.tile_set;
-var tile : TileData;
+var tile : Vector2;
 
 func _ready() -> void:
 	Global.test_tilemap = self;
+	tile = get_cell_atlas_coords(Vector2(0, 1))
 	#1 rot TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
 	#2 rot TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
 	#3 rot TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H
