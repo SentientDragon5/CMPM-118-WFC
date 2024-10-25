@@ -1,5 +1,6 @@
 class_name Tiled_Rules extends Resource
 @export var tileset : TileSet; #not using yet
+@export var periodic : bool;
 @export var tiles : Array[Dictionary]; #{ name:"bridge", symmetry:"I" }
 @export var neighbors : Array[Dictionary]; #{ left:"bridge 1", right:"river 1" }
 		

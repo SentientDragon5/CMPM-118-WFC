@@ -27,17 +27,18 @@ signal model_generated;
 
 func _ready() -> void:
 	#return
-	var test_arr = [];
-	test_arr.resize(3);
-	var count = 0
-	for i in 3:
-		test_arr[i] = [];
-		test_arr[i].resize(3);
-		for j in 3:
-			test_arr[i][j] = count;
-			count += 1;
-	print_debug(test_arr[0][1])
+	#var test_arr = [];
+	#test_arr.resize(3);
+	#var count = 0
+	#for i in 3:
+		#test_arr[i] = [];
+		#test_arr[i].resize(3);
+		#for j in 3:
+			#test_arr[i][j] = count;
+			#count += 1;
+	#print_debug(test_arr[0][1])
 	generate_sample();
+	sample = rotate_pattern
 	print_debug(sample[0][1]);
 	
 #REFACTOR LATER--Patterns---------------------------------------------

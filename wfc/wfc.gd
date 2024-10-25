@@ -1,11 +1,7 @@
-extends Node #Does the wfc
+class_name WFC_Solver extends Node #Does the wfc
 
 @export var model : Tiled_Model;
-
-func _ready() -> void:
-	return;
-	model.model_generated.connect(pre_initialize);
-	model.setup();
+@export var output : TileMapLayer;
 
 # not defined?
 var weights: Array[float] = [];
@@ -45,7 +41,9 @@ const DX: Array[int] = [-1,0,1,0];
 const DY: Array[int] = [0,1,0,-1];
 const OPPOSITE: Array[int] = [2,3,0,1];
 
-func pre_initialize(rng : RandomNumberGenerator) -> void:
+func pre_initialize(rng : RandomNumberGenerator, output_layer : TileMapLayer) -> void:
+	if output_layer != null:
+		output = output_layer;
 	image_width_tiles = model.final_width;
 	image_height_tiles = model.final_height;
 	total_tile_count = image_width_tiles * image_height_tiles;
@@ -103,7 +101,7 @@ func observe(rng : RandomNumberGenerator):
 	var argmin = -1;
 	for i in range(total_tile_count):
 		@warning_ignore("integer_division")
-		if model.on_boundary(i % image_width_tiles, i / image_width_tiles | 0):
+		if model.on_boundary(i % image_width_tiles, i / image_width_tiles):
 			continue;
 		var amount = tile_possible_pattern_count[i];
 		if amount == 0:
@@ -203,6 +201,7 @@ func generate(rng : RandomNumberGenerator):
 	while true:
 		var result = singleIteration(rng);
 		if result != null:
+			print_debug(result);
 			return result;
 	return false;
 
@@ -258,7 +257,7 @@ func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Refresh"):
 		var new_rng = RandomNumberGenerator.new();
-		pre_initialize(new_rng);
+		pre_initialize(new_rng, null);
 
 func drawTileIDs() -> void:
 	for i in range(16):
@@ -270,9 +269,9 @@ func drawTileIDs() -> void:
 
 
 func drawTiles() -> void:
-	var tilemap = Global.test_tilemap;
+	output.tile_set = model.rules_definition.tileset;
 
-	var cardinality_transformations: Dictionary = {
+	const cardinality_transformations: Dictionary = {
 		1: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V,
 		2: TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
 		3: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H,
@@ -288,6 +287,6 @@ func drawTiles() -> void:
 		for tile_x in range (model.final_height):
 			var tile_data = model.tiles[collapsed_tiles[index]];
 			var transform = cardinality_transformations.get(tile_data[1], 0);
-
-			tilemap.set_cell(Vector2i(tile_x, tile_y), 0, tile_data[0], transform);
+			
+			output.set_cell(Vector2i(tile_x, tile_y), 1, tile_data[0], transform);
 			index += 1;

@@ -1,6 +1,6 @@
 class_name  Tiled_Model extends Node #Generates the rules for a tiled definition
 #Start with abstract representation
-@export var rules_definition : Tiled_Rules = t1.new(); #work on better way to do this
+@export var rules_definition : Tiled_Rules; #work on better way to do this
 @export var final_width : int;
 @export var final_height : int;
 var directions : int = 4;
@@ -20,9 +20,7 @@ signal model_generated;
 func setup() -> void:
 	generate_model_rules();
 	#log_debug_info();
-	var rng : RandomNumberGenerator = RandomNumberGenerator.new();
-	rng.seed = hash("WORK PLEASE") * randi_range(0, 6969);
-	model_generated.emit(rng);
+	model_generated.emit();
 var cardinal_tile_mappings : Array = [];
 var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
 var tile_name_of : Array = [];
@@ -173,7 +171,7 @@ func generate_model_rules() -> void:
 	pass;
 	
 func on_boundary(x:int, y:int) -> bool: #returns true if the x, y tile is oob
-	return (x < 0 || y < 0 || x >= final_width || y >= final_height);
+	return !rules_definition.periodic && (x < 0 || y < 0 || x >= final_width || y >= final_height);
 	
 func log_debug_info():
 	assert(propagator.size() > 0);
