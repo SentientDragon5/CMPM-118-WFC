@@ -135,6 +135,8 @@ func observe(rng : RandomNumberGenerator):
 			for _t in range(total_pattern_count):
 				if wave[i][_t]:
 					collapsed_tiles[i] = _t;
+					#TODO Is this the best place to do this?
+					add_tm_entry();
 		return true;
 		
 	for _t in range(total_pattern_count):
