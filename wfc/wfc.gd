@@ -44,6 +44,8 @@ const DX: Array[int] = [-1,0,1,0];
 const DY: Array[int] = [0,1,0,-1];
 const OPPOSITE: Array[int] = [2,3,0,1];
 
+var time_machine: TimeMachine = null;
+
 func pre_initialize(wfc_model : Tiled_Model, output_layer : TileMapLayer) -> void:
 	if output_layer != null:
 		output = output_layer;
@@ -64,6 +66,7 @@ func populate_WFC(populate_layer : TileMapLayer = null) -> void:
 func clear_populated() -> void:
 	populated_output = false;
 	populated_tiles.resize(0);
+
 
 
 func initialize() -> void:
@@ -125,10 +128,15 @@ func observe(rng : RandomNumberGenerator):
 				argmin = i;
 	# search for the minimum entropy.
 	if argmin == -1:
+		collapsed_tiles = [];
+		collapsed_tiles.resize(total_tile_count);
+		collapsed_tiles.fill(-1);
 		for i in range(total_tile_count):
 			for _t in range(total_pattern_count):
 				if wave[i][_t]:
 					collapsed_tiles[i] = _t;
+					#TODO Is this the best place to do this?
+					add_tm_entry();
 		return true;
 		
 	for _t in range(total_pattern_count):
@@ -202,9 +210,14 @@ func iterate(iterations : int, rng) -> bool:
 			return result;
 	return true;
 
-func generate(rng : RandomNumberGenerator):
-	if rng == null:
-		rng = RandomNumberGenerator.new();
+func generate(rng_seed : String = "") -> bool:
+	var rng = RandomNumberGenerator.new();
+
+	if rng_seed == "":
+		rng.seed = hash("WORK PLEASE") * randi_range(0, 6969696969);
+	else:
+		rng.seed = hash(rng_seed);
+
 	if wave == null:
 		initialize();
 	clear();
@@ -216,6 +229,16 @@ func generate(rng : RandomNumberGenerator):
 			print_debug(result);
 			return result;
 	return false;
+	
+func generate_with_time_machine(rng_seed : String = "") -> TimeMachine:
+	time_machine = TimeMachine.new();
+	time_machine.tilemap = output;
+	time_machine.tileset = model.rules_definition.tileset;
+	time_machine.tiles = model.tiles;
+	time_machine.map_size_x = model.final_width;
+	time_machine.map_size_y = model.final_height;
+	generate(rng_seed);
+	return time_machine;
 
 func ban(i,_t) -> void:
 	var comp = compatibility_matrix[i][_t];
@@ -283,6 +306,11 @@ func ban_pop_tiles() -> void:
 			if w[_t] != (_t==tile[1]):
 				ban(tile[0], _t);
 		propagate();
+        
+func add_tm_entry():
+	if time_machine:
+		var tmp = time_machine.add_capsule();
+		tmp.collapsed = collapsed_tiles;
 
 func drawTileIDs() -> void: #for debugging
 	for i in range(16):
@@ -292,19 +320,11 @@ func drawTileIDs() -> void: #for debugging
 			text.text = str(collapsed_tiles[i + j * 16]);
 			get_tree().get_root().call_deferred("add_child", text);
 
-
+# Use the time machine version if possible!
 func drawTiles() -> void:
 	output.tile_set = model.rules_definition.tileset;
 
-	const cardinality_transformations: Dictionary = {
-		1: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V,
-		2: TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
-		3: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H,
-		4: TileSetAtlasSource.TRANSFORM_FLIP_H,
-		5: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
-		6: TileSetAtlasSource.TRANSFORM_FLIP_V,
-		7: TileSetAtlasSource.TRANSFORM_TRANSPOSE
-	}
+	const cardinality_transformations = Global.cardinality_transformations;
 
 	var index = 0;
 
@@ -312,6 +332,6 @@ func drawTiles() -> void:
 		for tile_x in range (model.final_width):
 			var tile_data = model.tiles[collapsed_tiles[index]];
 			var transform = cardinality_transformations.get(tile_data[1], 0);
-			
+
 			output.set_cell(Vector2i(tile_x, tile_y), 1, tile_data[0], transform);
 			index += 1;

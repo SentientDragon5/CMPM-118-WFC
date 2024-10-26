@@ -1,6 +1,16 @@
 extends Node
 var test_tilemap : TileMapLayer;
 
+const cardinality_transformations: Dictionary = {
+	1: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V,
+	2: TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
+	3: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H,
+	4: TileSetAtlasSource.TRANSFORM_FLIP_H,
+	5: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
+	6: TileSetAtlasSource.TRANSFORM_FLIP_V,
+	7: TileSetAtlasSource.TRANSFORM_TRANSPOSE
+}
+
 
 func _ready() -> void:
 	pass;

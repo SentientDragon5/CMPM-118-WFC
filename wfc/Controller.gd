@@ -4,10 +4,10 @@ extends Node2D
 
 @onready var WFC : WFC_Solver = get_node("%WFC");
 
-var rng : RandomNumberGenerator
 var defn_maker : Defn_Factory;
 var defn : Tiled_Rules;
 var model : Tiled_Model;
+var tm: TimeMachine;
 
 var first_run : bool = true;
 var time_stamp : int;
@@ -15,8 +15,7 @@ var time_stamp : int;
 var path : String = "res://tilesets/kenney/kenney_model2.tres";
 
 func _ready() -> void:
-	rng = RandomNumberGenerator.new();
-	rng.seed = hash("WORK PLEASE") * randi_range(0, 6969696969);
+	pass;
 	
 	
 	#defn_maker = Defn_Factory.new(sample_layer, Vector2(47, 22), "F", true, false);
@@ -60,7 +59,10 @@ func _input(event: InputEvent) -> void:
 		create_special_model();
 	if event.is_action_pressed("wfc"):
 		run_wfc();
-		
+	if event.is_action_pressed("tm_mv_forward"):
+		tm.moveForward();
+	if event.is_action_pressed("tm_mv_backward"):
+		tm.moveBackward();
 		
 func create_def() -> void:
 	print_debug("Beginning definition building!");
@@ -101,8 +103,15 @@ func run_wfc() -> void:
 		
 		WFC.pre_initialize(model, output_layer);
 		WFC.populate_WFC(output_layer);
-		if !!WFC.generate(rng):
+		tm = WFC.generate_with_time_machine()
+		if tm:
 			WFC.drawTiles();
 		first_run = false;
 		print_debug("First run of WFC finished in:");
 		print_debug(Time.get_ticks_msec() - time_stamp);
+
+func run_wfc_solver() -> void:
+	var timestamp = Time.get_unix_time_from_system();
+	tm = WFC.generate_with_time_machine();
+	tm.drawTiles();
+	print_debug("Solved WFC in " + str(Time.get_unix_time_from_system() - timestamp) + " seconds.");
