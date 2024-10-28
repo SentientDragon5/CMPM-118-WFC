@@ -57,30 +57,22 @@ func get_neighbors() -> void:#currently generates redundant rules
 			var cur_tile : Vector2 = Vector2(x, y);
 			#get correct cardinality based on rotations and alt tile id
 			if x < sample_size.x - 1: 
-				var result : Dictionary = {"left": 0, "right": 0};
 				var l_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(cur_tile));
 				var l_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(cur_tile));
 				var right_coords : Vector2 = sample_layer.get_neighbor_cell(cur_tile, TileSet.CELL_NEIGHBOR_RIGHT_SIDE);
 				var r_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(right_coords));
 				var r_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(right_coords));
-				result["left"] = l_neighbor + " " + str(l_neighbor_cardinality);
-				result["right"] = r_neighbor + " " + str(r_neighbor_cardinality);
-				if is_rule_unique(result["left"], result["right"]):
-					new_definition.neighbors.push_back(result);
+				is_rule_unique(l_neighbor, l_neighbor_cardinality, r_neighbor, r_neighbor_cardinality);
+				
 			elif periodic:
-				var result : Dictionary = {"left": 0, "right": 0};
 				var l_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(cur_tile));
 				var l_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(cur_tile));
 				var right_coords : Vector2 = Vector2(0, cur_tile.y);
 				var r_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(right_coords));
 				var r_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(right_coords));
-				result["left"] = l_neighbor + " " + str(l_neighbor_cardinality);
-				result["right"] = r_neighbor + " " + str(r_neighbor_cardinality);
-				if is_rule_unique(result["left"], result["right"]):
-					new_definition.neighbors.push_back(result);
+				is_rule_unique(l_neighbor, l_neighbor_cardinality, r_neighbor, r_neighbor_cardinality);
 				
 			if y < sample_size.y - 1:
-				var result : Dictionary = {"left": 0, "right": 0};
 				var u_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(cur_tile));
 				var u_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(cur_tile));
 				u_neighbor_cardinality = cardinality_rotation[u_neighbor_cardinality];
@@ -88,13 +80,9 @@ func get_neighbors() -> void:#currently generates redundant rules
 				var d_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(down_coords));
 				var d_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(down_coords));
 				d_neighbor_cardinality = cardinality_rotation[d_neighbor_cardinality];
-				result["left"] = u_neighbor + " " + str(u_neighbor_cardinality);
-				result["right"] = d_neighbor + " " + str(d_neighbor_cardinality);
-				if is_rule_unique(result["left"], result["right"]):
-					new_definition.neighbors.push_back(result);
+				is_rule_unique(u_neighbor, u_neighbor_cardinality, d_neighbor, d_neighbor_cardinality);
 				
 			elif periodic:
-				var result : Dictionary = {"left": 0, "right": 0};
 				var u_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(cur_tile));
 				var u_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(cur_tile));
 				u_neighbor_cardinality = cardinality_rotation[u_neighbor_cardinality];
@@ -102,18 +90,31 @@ func get_neighbors() -> void:#currently generates redundant rules
 				var d_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(down_coords));
 				var d_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(down_coords));
 				d_neighbor_cardinality = cardinality_rotation[d_neighbor_cardinality];
-				result["left"] = u_neighbor + " " + str(u_neighbor_cardinality);
-				result["right"] = d_neighbor + " " + str(d_neighbor_cardinality);
-				if is_rule_unique(result["left"], result["right"]):
-					new_definition.neighbors.push_back(result);
+				is_rule_unique(u_neighbor, u_neighbor_cardinality, d_neighbor, d_neighbor_cardinality);
 
 func get_tile_name(atlas_coords:Vector2) -> String:
 	return str(atlas_coords.x)+","+str(atlas_coords.y);
 	
-func is_rule_unique(left : String, right : String) -> bool:
-	var rule_name : String = left + " " + right;
+func is_rule_unique(left : String, l_card : int,  right : String, r_card : int) -> bool: #TODO different, peferably faster, hashing
+	#for card from side, instead of tile config
+	if l_card > 3:
+		l_card = (l_card + 2)%4; # e.g. card 5 has the same side on the right and left as 3
+	if r_card > 3:
+		r_card = (r_card + 2)%4;
+	
+	var result : Dictionary = {"left": 0, "right": 0};
+	#standardize lowest card to come first in rule
+	if l_card < r_card:
+		result["left"] = left + " " + str(l_card);
+		result["right"] = right + " " + str(r_card);
+	else:
+		result["left"] = right + " " + str(cardinality_rotation[cardinality_rotation[r_card]]);
+		result["right"] = left + " " + str(cardinality_rotation[cardinality_rotation[l_card]]);
+	
+	var rule_name : String = result["left"] + " " + result["right"];
 	if (unique_rules.has(rule_name)):
 		return false;
 	else: 
 		unique_rules[rule_name] = true;
+		new_definition.neighbors.push_back(result);
 		return true;
