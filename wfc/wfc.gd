@@ -135,8 +135,6 @@ func observe(rng : RandomNumberGenerator):
 			for _t in range(total_pattern_count):
 				if wave[i][_t]:
 					collapsed_tiles[i] = _t;
-					#TODO Is this the best place to do this?
-					add_tm_entry();
 		return true;
 		
 	for _t in range(total_pattern_count):
@@ -189,6 +187,8 @@ func propagate() -> void:
 
 func singleIteration(rng : RandomNumberGenerator):
 	var result = observe(rng);
+	#TODO Is this the best place to do this?
+	add_tm_entry();
 	if result != null:
 		generation_complete = result;
 		return result;
@@ -268,6 +268,7 @@ func clear() -> void:
 		tile_pattern_log_weight_sums[i] = total_log_weighted_sums;
 		tile_pattern_entropies[i] = initial_entropy;
 		collapsed_tiles.resize(total_tile_count);
+		collapsed_tiles.fill(-1);
 
 	initialized_field = true;
 	generation_complete = false;
@@ -306,11 +307,13 @@ func ban_pop_tiles() -> void:
 			if w[_t] != (_t==tile[1]):
 				ban(tile[0], _t);
 		propagate();
-        
+		
 func add_tm_entry():
 	if time_machine:
 		var tmp = time_machine.add_capsule();
-		tmp.collapsed = collapsed_tiles;
+		tmp.collapsed = collapsed_tiles.duplicate(true);
+		tmp.wave = wave.duplicate(true);
+		tmp.entropy = tile_pattern_entropies.duplicate(true);
 
 func drawTileIDs() -> void: #for debugging
 	for i in range(16):
@@ -323,7 +326,6 @@ func drawTileIDs() -> void: #for debugging
 # Use the time machine version if possible!
 func drawTiles() -> void:
 	output.tile_set = model.rules_definition.tileset;
-
 	const cardinality_transformations = Global.cardinality_transformations;
 
 	var index = 0;
