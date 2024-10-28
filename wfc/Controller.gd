@@ -21,6 +21,7 @@ func _ready() -> void:
 	defn_maker.periodic = false;
 	defn = defn_maker.setup();
 	print_debug("Finished building definition.")
+	print_debug(Time.get_ticks_msec());
 	sample_layer.visible = false;
 		
 	model = Tiled_Model.new();
@@ -28,6 +29,8 @@ func _ready() -> void:
 	model.final_height = 16;
 	model.final_width = 16;
 	model.setup();
-	print_debug("Finished building rules.")
+	print_debug("Finished building rules.");
+	print_debug(Time.get_ticks_msec());
 	WFC.model = model;
 	WFC.pre_initialize(rng, output_layer);
+	print_debug(Time.get_ticks_msec());

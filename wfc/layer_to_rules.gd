@@ -6,7 +6,10 @@ var new_definition : Tiled_Rules;
 @export var weight_evenly : bool = false;
 @export var periodic : bool = true;
 
+#enum UNIQUE
+
 var unique_tiles : Dictionary;
+var unique_rules : Dictionary;
 
 const cardinality_transformations: Dictionary = {
 	0: 0,
@@ -62,7 +65,8 @@ func get_neighbors() -> void:#currently generates redundant rules
 				var r_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(right_coords));
 				result["left"] = l_neighbor + " " + str(l_neighbor_cardinality);
 				result["right"] = r_neighbor + " " + str(r_neighbor_cardinality);
-				new_definition.neighbors.push_back(result);
+				if is_rule_unique(result["left"], result["right"]):
+					new_definition.neighbors.push_back(result);
 			elif periodic:
 				var result : Dictionary = {"left": 0, "right": 0};
 				var l_neighbor : String = get_tile_name(sample_layer.get_cell_atlas_coords(cur_tile));
@@ -72,7 +76,8 @@ func get_neighbors() -> void:#currently generates redundant rules
 				var r_neighbor_cardinality : int = cardinality_transformations.find_key(sample_layer.get_cell_alternative_tile(right_coords));
 				result["left"] = l_neighbor + " " + str(l_neighbor_cardinality);
 				result["right"] = r_neighbor + " " + str(r_neighbor_cardinality);
-				new_definition.neighbors.push_back(result);
+				if is_rule_unique(result["left"], result["right"]):
+					new_definition.neighbors.push_back(result);
 				
 			if y < sample_size.y - 1:
 				var result : Dictionary = {"left": 0, "right": 0};
@@ -85,7 +90,8 @@ func get_neighbors() -> void:#currently generates redundant rules
 				d_neighbor_cardinality = cardinality_rotation[d_neighbor_cardinality];
 				result["left"] = u_neighbor + " " + str(u_neighbor_cardinality);
 				result["right"] = d_neighbor + " " + str(d_neighbor_cardinality);
-				new_definition.neighbors.push_back(result);
+				if is_rule_unique(result["left"], result["right"]):
+					new_definition.neighbors.push_back(result);
 				
 			elif periodic:
 				var result : Dictionary = {"left": 0, "right": 0};
@@ -98,7 +104,16 @@ func get_neighbors() -> void:#currently generates redundant rules
 				d_neighbor_cardinality = cardinality_rotation[d_neighbor_cardinality];
 				result["left"] = u_neighbor + " " + str(u_neighbor_cardinality);
 				result["right"] = d_neighbor + " " + str(d_neighbor_cardinality);
-				new_definition.neighbors.push_back(result);
+				if is_rule_unique(result["left"], result["right"]):
+					new_definition.neighbors.push_back(result);
 
 func get_tile_name(atlas_coords:Vector2) -> String:
 	return str(atlas_coords.x)+","+str(atlas_coords.y);
+	
+func is_rule_unique(left : String, right : String) -> bool:
+	var rule_name : String = left + " " + right;
+	if (unique_rules.has(rule_name)):
+		return false;
+	else: 
+		unique_rules[rule_name] = true;
+		return true;
