@@ -279,11 +279,6 @@ func ban_pop_tiles() -> void:
 			if w[_t] != (_t==tile[1]):
 				ban(tile[0], _t);
 		propagate();
-	
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("Refresh"):
-		var new_rng = RandomNumberGenerator.new();
-		pre_initialize(new_rng, null);
 
 func drawTileIDs() -> void: #for debugging
 	for i in range(16):

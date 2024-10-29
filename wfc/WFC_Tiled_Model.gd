@@ -1,15 +1,15 @@
-class_name  Tiled_Model extends Node #Generates the rules for a tiled definition
+class_name  Tiled_Model extends Resource #Generates the rules for a tiled definition
 #Start with abstract representation
 @export var rules_definition : Tiled_Rules; #work on better way to do this
 @export var final_width : int;
 @export var final_height : int;
-var directions : int = 4;
+@export var directions : int = 4;
 #Tiles are currently in form [Vector2(Atlas Coords), Cardinality]
-var tiles : Array;
-var num_patterns : int;
-var weights: Array[float];
+@export var tiles : Array;
+@export var num_patterns : int;
+@export var weights: Array[float];
 
-var propagator : Array = [];
+@export var propagator : Array = [];
 
 enum NEIGHBOR {NAME, ROTATIONS};
 enum CARDINALITY {SAME, ONE_ROTA, TWO_ROTA, THREE_ROTA, REFL, ONE_ROTA_REFL, TWO_ROTA_REFL, THREE_ROTA_REFL};
@@ -37,9 +37,9 @@ func setup() -> void:
 	generate_model_rules();
 	#log_debug_info();
 	model_generated.emit();
-var cardinal_tile_mappings : Array = [];
-var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
-var tile_name_of : Array = [];
+@export var cardinal_tile_mappings : Array = [];
+@export var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
+@export var tile_name_of : Array = [];
 
 func generate_model_rules() -> void:
 	#periodicity?
