@@ -13,24 +13,17 @@ func _ready() -> void:
 	rng.seed = hash("WORK PLEASE") * randi_range(0, 6969696969);
 	
 	
-	defn_maker = Defn_Factory.new();
-	defn_maker.sample_layer = sample_layer;
-	defn_maker.weight_evenly = true;
-	defn_maker.sample_size = Vector2(40, 22);
-	defn_maker.force_symmetry = "F";
-	defn_maker.periodic = false;
+	defn_maker = Defn_Factory.new(sample_layer, Vector2(47, 22), "F", true, false);
 	defn = defn_maker.setup();
 	print_debug("Finished building definition.")
 	print_debug(Time.get_ticks_msec());
 	sample_layer.visible = false;
 		
-	model = Tiled_Model.new();
-	model.rules_definition = defn;
-	model.final_height = 16;
-	model.final_width = 16;
+	model = Tiled_Model.new(defn, 40, 23);
 	model.setup();
 	print_debug("Finished building rules.");
 	print_debug(Time.get_ticks_msec());
+	
 	WFC.model = model;
-	WFC.pre_initialize(rng, output_layer);
+	WFC.pre_initialize(rng, output_layer, true);
 	print_debug(Time.get_ticks_msec());

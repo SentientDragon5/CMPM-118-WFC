@@ -2,6 +2,9 @@ class_name WFC_Solver extends Node #Does the wfc
 
 @export var model : Tiled_Model;
 @export var output : TileMapLayer;
+var populated_output : bool = false;
+var populated_tiles : Array = []; #each is [position index, tile_id]
+#var starting_points : Dictionary; # should be key: position index, val : [tile name, card]
 
 # not defined?
 var weights: Array[float] = [];
@@ -41,7 +44,7 @@ const DX: Array[int] = [-1,0,1,0];
 const DY: Array[int] = [0,1,0,-1];
 const OPPOSITE: Array[int] = [2,3,0,1];
 
-func pre_initialize(rng : RandomNumberGenerator, output_layer : TileMapLayer) -> void:
+func pre_initialize(rng : RandomNumberGenerator, output_layer : TileMapLayer, populated = false) -> void:
 	if output_layer != null:
 		output = output_layer;
 	image_width_tiles = model.final_width;
@@ -50,6 +53,11 @@ func pre_initialize(rng : RandomNumberGenerator, output_layer : TileMapLayer) ->
 	total_pattern_count = model.num_patterns;
 
 	weights = model.weights;
+	
+	if populated:
+		populated_output = true;
+		get_pop_tiles();
+		#starting_points = populated;
 	
 	if !!generate(rng):
 		drawTiles();
@@ -106,7 +114,7 @@ func observe(rng : RandomNumberGenerator):
 		var amount = tile_possible_pattern_count[i];
 		if amount == 0:
 			return false;
-		var entropy = tile_pattern_entropies[i]
+		var entropy = tile_pattern_entropies[i];
 		if amount>1 && entropy <= min_noise:
 			var noise = 0.000001 * rng.randf_range(0,1); # DOUBLE CHECK
 			if entropy + noise < min_noise:
@@ -121,7 +129,7 @@ func observe(rng : RandomNumberGenerator):
 				if wave[i][_t]:
 					collapsed_tiles[i] = _t;
 		return true;
-
+		
 	for _t in range(total_pattern_count):
 		possible_pattern_weights[_t] = weights[_t] if wave[argmin][_t] else 0.0;
 	var r = randomIndice(possible_pattern_weights, rng);
@@ -198,6 +206,8 @@ func generate(rng : RandomNumberGenerator):
 	if wave == null:
 		initialize();
 	clear();
+	if populated_output:
+		ban_pop_tiles();
 	while true:
 		var result = singleIteration(rng);
 		if result != null:
@@ -253,13 +263,29 @@ func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
 		index+=1;
 	return 0;
 	
+func get_pop_tiles() -> void:
+	for tile_y in range(model.final_height):
+		for tile_x in range (model.final_width):
+			var tile_coords : Vector2i =  output.get_cell_atlas_coords(Vector2i(tile_x, tile_y));
+			if tile_coords == Vector2i(-1, -1): #notatile
+				continue;
+			var tile_id : int = model.id_from_tile_data([tile_coords, output.get_cell_alternative_tile(Vector2i(tile_x, tile_y))]);
+			populated_tiles.push_back([tile_x + tile_y * image_width_tiles, tile_id]);
+			
+func ban_pop_tiles() -> void:
+	for tile in populated_tiles:
+		var w = wave[tile[0]]; #get wave of tile's pos index
+		for _t in range(total_pattern_count):
+			if w[_t] != (_t==tile[1]):
+				ban(tile[0], _t);
+		propagate();
 	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Refresh"):
 		var new_rng = RandomNumberGenerator.new();
 		pre_initialize(new_rng, null);
 
-func drawTileIDs() -> void:
+func drawTileIDs() -> void: #for debugging
 	for i in range(16):
 		for j in range(16):
 			var text = Label.new();
@@ -283,8 +309,8 @@ func drawTiles() -> void:
 
 	var index = 0;
 
-	for tile_y in range(model.final_width):
-		for tile_x in range (model.final_height):
+	for tile_y in range(model.final_height):
+		for tile_x in range (model.final_width):
 			var tile_data = model.tiles[collapsed_tiles[index]];
 			var transform = cardinality_transformations.get(tile_data[1], 0);
 			

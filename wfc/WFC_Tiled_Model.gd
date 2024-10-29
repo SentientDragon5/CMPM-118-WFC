@@ -15,7 +15,23 @@ enum NEIGHBOR {NAME, ROTATIONS};
 enum CARDINALITY {SAME, ONE_ROTA, TWO_ROTA, THREE_ROTA, REFL, ONE_ROTA_REFL, TWO_ROTA_REFL, THREE_ROTA_REFL};
 enum DIRECTIONS {LEFT, DOWN, RIGHT, UP};
 
+const cardinality_transformations: Dictionary = {
+	0: 0,
+	1: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V,
+	2: TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
+	3: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H,
+	4: TileSetAtlasSource.TRANSFORM_FLIP_H,
+	5: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V,
+	6: TileSetAtlasSource.TRANSFORM_FLIP_V,
+	7: TileSetAtlasSource.TRANSFORM_TRANSPOSE
+}
+
 signal model_generated;
+
+func _init(definition : Tiled_Rules = rules_definition, fx : int = final_width, fy : int = final_height) -> void:
+	rules_definition = definition;
+	final_width = fx;
+	final_height = fy;
 
 func setup() -> void:
 	generate_model_rules();
@@ -107,7 +123,7 @@ func generate_model_rules() -> void:
 				parent_tile_id + reflection_mapping_func.call(rotation_mapping_func.call(rotation_mapping_func.call(c))), #refl of 2 rot
 				parent_tile_id + reflection_mapping_func.call(rotation_mapping_func.call(rotation_mapping_func.call(rotation_mapping_func.call(c)))), #refl of 3 rot
 			]);
-			tile_name_of.push_back(currentTile.name + str(c));
+			tile_name_of.push_back(currentTile.name + " " + str(c));
 		
 		#Add weights
 		for c in cardinality:
@@ -170,6 +186,17 @@ func generate_model_rules() -> void:
 				propagator[d][p1] = rule_list;
 	pass;
 	
+func id_from_tile_data(tile : Array) -> int: #[atlas_coords, alt_id]
+	var cardinality = cardinality_transformations.find_key(tile[1]);
+	var tile_name : String;
+	for tile_obj in rules_definition.tiles:
+		if tile_obj["atlas_coords"] == Vector2(tile[0]):
+			tile_name = tile_obj["name"];
+			var parent_id : int = tile_id_of[tile_name];
+			return cardinal_tile_mappings[parent_id][cardinality];
+	print_debug("Tile data not in tiles!");
+	return -1;
+
 func on_boundary(x:int, y:int) -> bool: #returns true if the x, y tile is oob
 	return !rules_definition.periodic && (x < 0 || y < 0 || x >= final_width || y >= final_height);
 	

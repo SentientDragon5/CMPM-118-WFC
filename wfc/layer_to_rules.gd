@@ -11,6 +11,13 @@ var new_definition : Tiled_Rules;
 var unique_tiles : Dictionary;
 var unique_rules : Dictionary;
 
+func _init(sample : TileMapLayer = sample_layer, sampl_size : Vector2 = sample_size, forced_symm : String = "F", even_weights : bool = false, s_periodic : bool = false) -> void:
+	sample_layer = sample;
+	sample_size = sampl_size;
+	force_symmetry = forced_symm;
+	weight_evenly = even_weights;
+	periodic = s_periodic;
+
 const cardinality_transformations: Dictionary = {
 	0: 0,
 	1: TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V,
