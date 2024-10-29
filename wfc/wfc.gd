@@ -237,6 +237,7 @@ func generate_with_time_machine(rng_seed : String = "") -> TimeMachine:
 	time_machine.tiles = model.tiles;
 	time_machine.map_size_x = model.final_width;
 	time_machine.map_size_y = model.final_height;
+	time_machine.node = get_parent();
 	generate(rng_seed);
 	return time_machine;
 
@@ -313,7 +314,6 @@ func add_tm_entry():
 		var tmp = time_machine.add_capsule();
 		tmp.collapsed = collapsed_tiles.duplicate(true);
 		tmp.wave = wave.duplicate(true);
-		tmp.entropy = tile_pattern_entropies.duplicate(true);
 
 func drawTileIDs() -> void: #for debugging
 	for i in range(16):
