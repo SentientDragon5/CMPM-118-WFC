@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="Tiled_Model" load_steps=3 format=3]
 
-[ext_resource type="Resource" path="res://tilesets/kenney/kenney_defn.tres" id="1_8g2nj"]
-[ext_resource type="Script" path="res://WFC_Tiled_Model.gd" id="2_crm3t"]
+[ext_resource type="Resource" path="res://tilesets/kenney/kenney_defn.tres" id="1_fscu2"]
+[ext_resource type="Script" path="res://WFC_Tiled_Model.gd" id="2_b7ypm"]
 
 [resource]
-script = ExtResource("2_crm3t")
-rules_definition = ExtResource("1_8g2nj")
+script = ExtResource("2_b7ypm")
+rules_definition = ExtResource("1_fscu2")
 final_width = 40
 final_height = 23
 directions = 4

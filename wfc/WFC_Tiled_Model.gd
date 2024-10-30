@@ -34,14 +34,14 @@ func _init(definition : Tiled_Rules = rules_definition, fx : int = final_width, 
 	final_height = fy;
 
 func setup() -> void:
-	generate_model_rules();
+	_generate_model_rules();
 	#log_debug_info();
 	model_generated.emit();
 @export var cardinal_tile_mappings : Array = [];
 @export var tile_id_of : Dictionary = {}; #should move away from dictionaries in Godot
 @export var tile_name_of : Array = [];
 
-func generate_model_rules() -> void:
+func _generate_model_rules() -> void:
 	#periodicity?
 	#unique tiles?
 	#subsets?
@@ -169,21 +169,21 @@ func generate_model_rules() -> void:
 		tempPropagator[DIRECTIONS.DOWN][cardinal_tile_mappings[D_id][CARDINALITY.TWO_ROTA_REFL]][cardinal_tile_mappings[U_id][CARDINALITY.TWO_ROTA_REFL]] = true;
 		tempPropagator[DIRECTIONS.DOWN][cardinal_tile_mappings[U_id][CARDINALITY.REFL]][cardinal_tile_mappings[D_id][CARDINALITY.REFL]] = true;
 		tempPropagator[DIRECTIONS.DOWN][cardinal_tile_mappings[D_id][CARDINALITY.TWO_ROTA]][cardinal_tile_mappings[U_id][CARDINALITY.TWO_ROTA]] = true;
-		#right and up rules
-		for p in num_patterns:
+	#right and up rules
+	for p in num_patterns:
+		for p2 in num_patterns:
+			tempPropagator[DIRECTIONS.RIGHT][p][p2] = tempPropagator[DIRECTIONS.LEFT][p2][p]
+			tempPropagator[DIRECTIONS.UP][p][p2] = tempPropagator[DIRECTIONS.DOWN][p2][p]
+	#push rules from temp to propagator
+	for d in directions:
+		for p1 in num_patterns:
+			var rule_list : Array = [];
+			var temp_prop_list : Array = tempPropagator[d][p1];
 			for p2 in num_patterns:
-				tempPropagator[DIRECTIONS.RIGHT][p][p2] = tempPropagator[DIRECTIONS.LEFT][p2][p]
-				tempPropagator[DIRECTIONS.UP][p][p2] = tempPropagator[DIRECTIONS.DOWN][p2][p]
-		#push rules from temp to propagator
-		for d in directions:
-			for p1 in num_patterns:
-				var rule_list : Array = [];
-				var temp_prop_list : Array = tempPropagator[d][p1];
-				for p2 in num_patterns:
-					if (temp_prop_list[p2]):
-						rule_list.append(p2);
-				
-				propagator[d][p1] = rule_list;
+				if (temp_prop_list[p2]):
+					rule_list.append(p2);
+			
+			propagator[d][p1] = rule_list;
 	pass;
 	
 func id_from_tile_data(tile : Array) -> int: #[atlas_coords, alt_id]

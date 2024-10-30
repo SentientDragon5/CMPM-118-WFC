@@ -44,23 +44,26 @@ const DX: Array[int] = [-1,0,1,0];
 const DY: Array[int] = [0,1,0,-1];
 const OPPOSITE: Array[int] = [2,3,0,1];
 
-func pre_initialize(rng : RandomNumberGenerator, output_layer : TileMapLayer, populated = false) -> void:
+func pre_initialize(wfc_model : Tiled_Model, output_layer : TileMapLayer) -> void:
 	if output_layer != null:
 		output = output_layer;
+	model = wfc_model;
 	image_width_tiles = model.final_width;
 	image_height_tiles = model.final_height;
 	total_tile_count = image_width_tiles * image_height_tiles;
 	total_pattern_count = model.num_patterns;
 
 	weights = model.weights;
+
+func populate_WFC(populate_layer : TileMapLayer = null) -> void:
+	if populate_layer == null || image_height_tiles == 0 || image_width_tiles == 0:
+		return;
+	get_pop_tiles(populate_layer);
+	populated_output = true;
 	
-	if populated:
-		populated_output = true;
-		get_pop_tiles();
-		#starting_points = populated;
-	
-	if !!generate(rng):
-		drawTiles();
+func clear_populated() -> void:
+	populated_output = false;
+	populated_tiles.resize(0);
 
 
 func initialize() -> void:
@@ -264,13 +267,13 @@ func randomIndice(distrib : Array, rng : RandomNumberGenerator) -> int:
 		index+=1;
 	return 0;
 	
-func get_pop_tiles() -> void:
+func get_pop_tiles(populate_layer : TileMapLayer) -> void:
 	for tile_y in range(model.final_height):
 		for tile_x in range (model.final_width):
-			var tile_coords : Vector2i =  output.get_cell_atlas_coords(Vector2i(tile_x, tile_y));
+			var tile_coords : Vector2i =  populate_layer.get_cell_atlas_coords(Vector2i(tile_x, tile_y));
 			if tile_coords == Vector2i(-1, -1): #notatile
 				continue;
-			var tile_id : int = model.id_from_tile_data([tile_coords, output.get_cell_alternative_tile(Vector2i(tile_x, tile_y))]);
+			var tile_id : int = model.id_from_tile_data([tile_coords, populate_layer.get_cell_alternative_tile(Vector2i(tile_x, tile_y))]);
 			populated_tiles.push_back([tile_x + tile_y * image_width_tiles, tile_id]);
 			
 func ban_pop_tiles() -> void:

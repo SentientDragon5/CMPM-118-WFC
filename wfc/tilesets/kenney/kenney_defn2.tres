@@ -1,0 +1,921 @@
+[gd_resource type="Resource" script_class="Special_Rules" load_steps=3 format=3 uid="uid://osq40hw5jwyc"]
+
+[ext_resource type="Script" path="res://special_tiled_rules.gd" id="1_n77mg"]
+[ext_resource type="TileSet" uid="uid://8giodelfx3tb" path="res://tilesets/kenney/kenney.tres" id="2_3jeb2"]
+
+[resource]
+script = ExtResource("1_n77mg")
+tile_id_of = {
+"0,0 0": 19,
+"0,1 0": 25,
+"0,2 0": 24,
+"0,3 0": 31,
+"0,4 0": 23,
+"10,0 0": 5,
+"10,1 0": 30,
+"10,4 0": 36,
+"10,5 0": 22,
+"10,6 0": 27,
+"11,13 0": 34,
+"12,0 0": 11,
+"12,1 0": 10,
+"12,2 0": 2,
+"12,3 0": 29,
+"12,4 0": 32,
+"12,5 0": 21,
+"12,6 0": 20,
+"12,7 0": 0,
+"12,8 0": 33,
+"13,0 0": 35,
+"13,1 0": 17,
+"13,2 0": 9,
+"13,3 0": 1,
+"13,4 0": 28,
+"5,10 0": 39,
+"5,11 0": 4,
+"5,9 0": 16,
+"6,9 0": 26,
+"7,10 0": 14,
+"7,11 0": 13,
+"7,12 0": 38,
+"7,13 0": 6,
+"7,9 0": 7,
+"8,10 0": 8,
+"8,11 0": 15,
+"8,12 0": 12,
+"8,13 0": 37,
+"9,0 0": 3,
+"9,13 0": 18
+}
+tileset = ExtResource("2_3jeb2")
+periodic = false
+tiles = Array[Dictionary]([{
+"atlas_coords": Vector2(12, 7),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(13, 3),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 2),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(9, 0),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(5, 11),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(10, 0),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(7, 13),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(7, 9),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(8, 10),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(13, 2),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 1),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 0),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(8, 12),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(7, 11),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(7, 10),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(8, 11),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(5, 9),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(13, 1),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(9, 13),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(0, 0),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 6),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 5),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(10, 5),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(0, 4),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(0, 2),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(0, 1),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(6, 9),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(10, 6),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(13, 4),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 3),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(10, 1),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(0, 3),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 4),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(12, 8),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(11, 13),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(13, 0),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(10, 4),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(8, 13),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(7, 12),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(5, 10),
+"cardinality": 0,
+"weight": 1
+}])
+neighbors = Array[Dictionary]([{
+"direction": 0,
+"tile1": 0,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 1
+}, {
+"direction": 0,
+"tile1": 1,
+"tile2": 1
+}, {
+"direction": 3,
+"tile1": 1,
+"tile2": 2
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 2
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 3
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 6
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 3
+}, {
+"direction": 0,
+"tile1": 3,
+"tile2": 7
+}, {
+"direction": 3,
+"tile1": 3,
+"tile2": 4
+}, {
+"direction": 0,
+"tile1": 4,
+"tile2": 8
+}, {
+"direction": 3,
+"tile1": 4,
+"tile2": 2
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 4
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 5
+}, {
+"direction": 0,
+"tile1": 5,
+"tile2": 5
+}, {
+"direction": 3,
+"tile1": 5,
+"tile2": 0
+}, {
+"direction": 0,
+"tile1": 1,
+"tile2": 9
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 10
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 11
+}, {
+"direction": 0,
+"tile1": 3,
+"tile2": 12
+}, {
+"direction": 3,
+"tile1": 3,
+"tile2": 6
+}, {
+"direction": 0,
+"tile1": 6,
+"tile2": 13
+}, {
+"direction": 3,
+"tile1": 6,
+"tile2": 7
+}, {
+"direction": 0,
+"tile1": 7,
+"tile2": 14
+}, {
+"direction": 3,
+"tile1": 7,
+"tile2": 8
+}, {
+"direction": 0,
+"tile1": 8,
+"tile2": 15
+}, {
+"direction": 3,
+"tile1": 8,
+"tile2": 6
+}, {
+"direction": 3,
+"tile1": 6,
+"tile2": 4
+}, {
+"direction": 0,
+"tile1": 4,
+"tile2": 16
+}, {
+"direction": 0,
+"tile1": 2,
+"tile2": 17
+}, {
+"direction": 0,
+"tile1": 5,
+"tile2": 18
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 9
+}, {
+"direction": 0,
+"tile1": 9,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 9,
+"tile2": 10
+}, {
+"direction": 0,
+"tile1": 10,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 10,
+"tile2": 11
+}, {
+"direction": 0,
+"tile1": 11,
+"tile2": 9
+}, {
+"direction": 3,
+"tile1": 11,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 12
+}, {
+"direction": 0,
+"tile1": 12,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 12,
+"tile2": 13
+}, {
+"direction": 0,
+"tile1": 13,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 13,
+"tile2": 14
+}, {
+"direction": 0,
+"tile1": 14,
+"tile2": 12
+}, {
+"direction": 3,
+"tile1": 14,
+"tile2": 15
+}, {
+"direction": 0,
+"tile1": 15,
+"tile2": 16
+}, {
+"direction": 3,
+"tile1": 15,
+"tile2": 13
+}, {
+"direction": 3,
+"tile1": 13,
+"tile2": 16
+}, {
+"direction": 0,
+"tile1": 16,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 16,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 17
+}, {
+"direction": 0,
+"tile1": 17,
+"tile2": 18
+}, {
+"direction": 3,
+"tile1": 17,
+"tile2": 10
+}, {
+"direction": 3,
+"tile1": 10,
+"tile2": 10
+}, {
+"direction": 0,
+"tile1": 10,
+"tile2": 19
+}, {
+"direction": 3,
+"tile1": 10,
+"tile2": 18
+}, {
+"direction": 0,
+"tile1": 18,
+"tile2": 20
+}, {
+"direction": 3,
+"tile1": 18,
+"tile2": 0
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 20
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 21
+}, {
+"direction": 3,
+"tile1": 9,
+"tile2": 11
+}, {
+"direction": 3,
+"tile1": 12,
+"tile2": 16
+}, {
+"direction": 3,
+"tile1": 17,
+"tile2": 18
+}, {
+"direction": 0,
+"tile1": 18,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 19
+}, {
+"direction": 0,
+"tile1": 19,
+"tile2": 22
+}, {
+"direction": 3,
+"tile1": 19,
+"tile2": 20
+}, {
+"direction": 0,
+"tile1": 20,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 20,
+"tile2": 20
+}, {
+"direction": 3,
+"tile1": 20,
+"tile2": 21
+}, {
+"direction": 0,
+"tile1": 21,
+"tile2": 24
+}, {
+"direction": 3,
+"tile1": 21,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 22
+}, {
+"direction": 0,
+"tile1": 22,
+"tile2": 22
+}, {
+"direction": 3,
+"tile1": 22,
+"tile2": 23
+}, {
+"direction": 0,
+"tile1": 23,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 23,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 23,
+"tile2": 24
+}, {
+"direction": 0,
+"tile1": 24,
+"tile2": 24
+}, {
+"direction": 3,
+"tile1": 24,
+"tile2": 0
+}, {
+"direction": 0,
+"tile1": 21,
+"tile2": 25
+}, {
+"direction": 0,
+"tile1": 24,
+"tile2": 25
+}, {
+"direction": 3,
+"tile1": 23,
+"tile2": 25
+}, {
+"direction": 0,
+"tile1": 25,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 25,
+"tile2": 20
+}, {
+"direction": 3,
+"tile1": 25,
+"tile2": 21
+}, {
+"direction": 0,
+"tile1": 22,
+"tile2": 26
+}, {
+"direction": 0,
+"tile1": 23,
+"tile2": 27
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 28
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 29
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 30
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 26
+}, {
+"direction": 0,
+"tile1": 26,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 26,
+"tile2": 27
+}, {
+"direction": 0,
+"tile1": 27,
+"tile2": 22
+}, {
+"direction": 3,
+"tile1": 27,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 0,
+"tile2": 28
+}, {
+"direction": 0,
+"tile1": 28,
+"tile2": 1
+}, {
+"direction": 3,
+"tile1": 28,
+"tile2": 29
+}, {
+"direction": 0,
+"tile1": 29,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 29,
+"tile2": 30
+}, {
+"direction": 0,
+"tile1": 30,
+"tile2": 5
+}, {
+"direction": 3,
+"tile1": 30,
+"tile2": 0
+}, {
+"direction": 0,
+"tile1": 23,
+"tile2": 31
+}, {
+"direction": 0,
+"tile1": 24,
+"tile2": 32
+}, {
+"direction": 0,
+"tile1": 27,
+"tile2": 26
+}, {
+"direction": 0,
+"tile1": 23,
+"tile2": 33
+}, {
+"direction": 3,
+"tile1": 23,
+"tile2": 31
+}, {
+"direction": 0,
+"tile1": 31,
+"tile2": 32
+}, {
+"direction": 3,
+"tile1": 31,
+"tile2": 32
+}, {
+"direction": 0,
+"tile1": 32,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 32,
+"tile2": 0
+}, {
+"direction": 0,
+"tile1": 1,
+"tile2": 34
+}, {
+"direction": 0,
+"tile1": 5,
+"tile2": 35
+}, {
+"direction": 0,
+"tile1": 31,
+"tile2": 24
+}, {
+"direction": 3,
+"tile1": 31,
+"tile2": 33
+}, {
+"direction": 0,
+"tile1": 33,
+"tile2": 0
+}, {
+"direction": 3,
+"tile1": 33,
+"tile2": 33
+}, {
+"direction": 3,
+"tile1": 33,
+"tile2": 32
+}, {
+"direction": 3,
+"tile1": 28,
+"tile2": 34
+}, {
+"direction": 0,
+"tile1": 34,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 34,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 35
+}, {
+"direction": 0,
+"tile1": 35,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 35,
+"tile2": 30
+}, {
+"direction": 3,
+"tile1": 29,
+"tile2": 29
+}, {
+"direction": 3,
+"tile1": 29,
+"tile2": 34
+}, {
+"direction": 3,
+"tile1": 26,
+"tile2": 33
+}, {
+"direction": 3,
+"tile1": 11,
+"tile2": 17
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 19
+}, {
+"direction": 0,
+"tile1": 30,
+"tile2": 35
+}, {
+"direction": 3,
+"tile1": 9,
+"tile2": 18
+}, {
+"direction": 0,
+"tile1": 19,
+"tile2": 36
+}, {
+"direction": 3,
+"tile1": 35,
+"tile2": 29
+}, {
+"direction": 0,
+"tile1": 29,
+"tile2": 17
+}, {
+"direction": 0,
+"tile1": 30,
+"tile2": 18
+}, {
+"direction": 3,
+"tile1": 20,
+"tile2": 36
+}, {
+"direction": 0,
+"tile1": 36,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 36,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 33,
+"tile2": 27
+}, {
+"direction": 0,
+"tile1": 22,
+"tile2": 36
+}, {
+"direction": 3,
+"tile1": 19,
+"tile2": 36
+}, {
+"direction": 0,
+"tile1": 19,
+"tile2": 26
+}, {
+"direction": 0,
+"tile1": 36,
+"tile2": 27
+}, {
+"direction": 0,
+"tile1": 3,
+"tile2": 37
+}, {
+"direction": 0,
+"tile1": 6,
+"tile2": 38
+}, {
+"direction": 3,
+"tile1": 6,
+"tile2": 6
+}, {
+"direction": 0,
+"tile1": 4,
+"tile2": 39
+}, {
+"direction": 0,
+"tile1": 37,
+"tile2": 37
+}, {
+"direction": 3,
+"tile1": 37,
+"tile2": 38
+}, {
+"direction": 0,
+"tile1": 38,
+"tile2": 38
+}, {
+"direction": 3,
+"tile1": 38,
+"tile2": 38
+}, {
+"direction": 3,
+"tile1": 38,
+"tile2": 39
+}, {
+"direction": 0,
+"tile1": 39,
+"tile2": 8
+}, {
+"direction": 3,
+"tile1": 39,
+"tile2": 2
+}, {
+"direction": 3,
+"tile1": 38,
+"tile2": 8
+}, {
+"direction": 0,
+"tile1": 8,
+"tile2": 38
+}, {
+"direction": 0,
+"tile1": 37,
+"tile2": 12
+}, {
+"direction": 0,
+"tile1": 38,
+"tile2": 13
+}, {
+"direction": 0,
+"tile1": 38,
+"tile2": 14
+}, {
+"direction": 0,
+"tile1": 39,
+"tile2": 39
+}, {
+"direction": 3,
+"tile1": 13,
+"tile2": 13
+}, {
+"direction": 0,
+"tile1": 14,
+"tile2": 37
+}, {
+"direction": 3,
+"tile1": 14,
+"tile2": 38
+}, {
+"direction": 0,
+"tile1": 38,
+"tile2": 15
+}, {
+"direction": 0,
+"tile1": 39,
+"tile2": 16
+}, {
+"direction": 3,
+"tile1": 2,
+"tile2": 37
+}, {
+"direction": 3,
+"tile1": 38,
+"tile2": 15
+}, {
+"direction": 0,
+"tile1": 15,
+"tile2": 39
+}, {
+"direction": 3,
+"tile1": 15,
+"tile2": 16
+}, {
+"direction": 0,
+"tile1": 37,
+"tile2": 7
+}, {
+"direction": 0,
+"tile1": 7,
+"tile2": 13
+}, {
+"direction": 3,
+"tile1": 7,
+"tile2": 38
+}, {
+"direction": 0,
+"tile1": 26,
+"tile2": 19
+}, {
+"direction": 0,
+"tile1": 27,
+"tile2": 36
+}])
