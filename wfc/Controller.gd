@@ -113,5 +113,5 @@ func run_wfc() -> void:
 func run_wfc_solver() -> void:
 	var timestamp = Time.get_unix_time_from_system();
 	tm = WFC.generate_with_time_machine();
-	tm.drawTiles();
+	tm.draw_map();
 	print_debug("Solved WFC in " + str(Time.get_unix_time_from_system() - timestamp) + " seconds.");

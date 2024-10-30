@@ -231,13 +231,20 @@ func generate(rng_seed : String = "") -> bool:
 	return false;
 	
 func generate_with_time_machine(rng_seed : String = "") -> TimeMachine:
-	time_machine = TimeMachine.new();
-	time_machine.tilemap = output;
-	time_machine.tileset = model.rules_definition.tileset;
-	time_machine.tiles = model.tiles;
-	time_machine.map_size_x = model.final_width;
-	time_machine.map_size_y = model.final_height;
-	time_machine.node = get_parent();
+	if time_machine:
+		time_machine.delete_history();
+		time_machine.unreference();
+		time_machine = null;
+
+	time_machine = TimeMachine.new(
+		output, # The tilemaplayer to draw tiles onto
+		model.rules_definition.tileset, # The tileset to draw from
+		model.tiles, # Tile definitions n rotations
+		model.final_width, # The width of the map
+		model.final_height, # The height of the map
+		get_parent() # The parent node that we should draw sprites on
+	);
+
 	generate(rng_seed);
 	return time_machine;
 
