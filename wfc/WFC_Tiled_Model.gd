@@ -128,7 +128,7 @@ func generate_model_rules() -> void:
 		#Add weights
 		for c in cardinality:
 			if currentTile.has("weight"):
-				weights.push_back(currentTile["weight"])
+				weights.push_back(currentTile["weight"]);
 			else:
 				weights.push_back(1);
 	num_patterns = cardinal_tile_mappings.size();

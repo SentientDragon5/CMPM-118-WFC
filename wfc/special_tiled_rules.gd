@@ -1,0 +1,1 @@
+class_name Special_Rules extends Tiled_Rules

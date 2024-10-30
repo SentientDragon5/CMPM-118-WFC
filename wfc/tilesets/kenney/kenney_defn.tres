@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="Tiled_Rules" load_steps=3 format=3 uid="uid://dfajmd5ahs8gm"]
 
-[ext_resource type="Script" path="res://simple_tile_model_rules.gd" id="1_st4lr"]
-[ext_resource type="TileSet" uid="uid://8giodelfx3tb" path="res://tilesets/kenney/kenney.tres" id="2_dsppf"]
+[ext_resource type="Script" path="res://simple_tile_model_rules.gd" id="1_h5lad"]
+[ext_resource type="TileSet" uid="uid://8giodelfx3tb" path="res://tilesets/kenney/kenney.tres" id="2_0naqn"]
 
 [resource]
-script = ExtResource("1_st4lr")
-tileset = ExtResource("2_dsppf")
+script = ExtResource("1_h5lad")
+tileset = ExtResource("2_0naqn")
 periodic = false
 tiles = Array[Dictionary]([{
 "atlas_coords": Vector2(12, 7),
@@ -108,6 +108,10 @@ tiles = Array[Dictionary]([{
 "name": "0,2",
 "symmetry": "F"
 }, {
+"atlas_coords": Vector2(13, 4),
+"name": "13,4",
+"symmetry": "F"
+}, {
 "atlas_coords": Vector2(0, 1),
 "name": "0,1",
 "symmetry": "F"
@@ -118,10 +122,6 @@ tiles = Array[Dictionary]([{
 }, {
 "atlas_coords": Vector2(10, 6),
 "name": "10,6",
-"symmetry": "F"
-}, {
-"atlas_coords": Vector2(13, 4),
-"name": "13,4",
 "symmetry": "F"
 }, {
 "atlas_coords": Vector2(12, 3),
@@ -391,6 +391,9 @@ neighbors = Array[Dictionary]([{
 "left": "12,7 3",
 "right": "12,5 3"
 }, {
+"left": "13,3 0",
+"right": "13,4 3"
+}, {
 "left": "10,5 3",
 "right": "12,7 3"
 }, {
@@ -414,6 +417,12 @@ neighbors = Array[Dictionary]([{
 }, {
 "left": "12,7 3",
 "right": "0,2 3"
+}, {
+"left": "13,4 2",
+"right": "12,7 3"
+}, {
+"left": "12,7 2",
+"right": "13,4 1"
 }, {
 "left": "0,1 2",
 "right": "12,5 2"

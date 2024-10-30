@@ -1,7 +1,7 @@
 class_name Tiled_Rules extends Resource
 @export var tileset : TileSet; #not using yet
 @export var periodic : bool;
-@export var tiles : Array[Dictionary]; #{ name:"bridge", symmetry:"I" }
+@export var tiles : Array[Dictionary]; #{ name:"bridge", symmetry:"I", atlas_coords:Vector2() }
 @export var neighbors : Array[Dictionary]; #{ left:"bridge 1", right:"river 1" }
 		
 #Example from json

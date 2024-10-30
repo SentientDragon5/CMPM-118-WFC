@@ -24,13 +24,13 @@ func _ready() -> void:
 	#sample_layer.visible = false;
 	#ResourceSaver.save(defn_maker.new_definition, "res://test_rules.tres");
 	
-	defn = load("res://tilesets/kenney/kenney_defn.tres");
+	#defn = load("res://tilesets/kenney/kenney_defn.tres");
 	#model = Tiled_Model.new(defn, 40, 23);
 	#model.setup();
 	#print_debug("Finished building rules.");
 	#print_debug(Time.get_ticks_msec());
 	#ResourceSaver.save(model, "res://tilesets/kenney/kenney_model.tres");
-	model = load("res://tilesets/kenney/kenney_model.tres");
+	#model = load("res://tilesets/kenney/kenney_model.tres");
 	
 	#WFC.model = model;
 	#WFC.pre_initialize(rng, output_layer, true);
@@ -60,7 +60,7 @@ func create_def() -> void:
 	time_stamp = Time.get_ticks_msec();
 	defn_maker = Defn_Factory.new(sample_layer, Vector2(47, 22), "F", true, false);
 	defn = defn_maker.setup();
-	ResourceSaver.save(defn_maker.new_definition, "res://test_rules.tres");
+	ResourceSaver.save(defn_maker.new_definition, "res://tilesets/kenney/kenney_defn.tres");
 	print_debug("Finished building definition in:");
 	print_debug(Time.get_ticks_msec() - time_stamp);
 	

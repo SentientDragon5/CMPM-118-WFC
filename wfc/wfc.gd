@@ -122,8 +122,6 @@ func observe(rng : RandomNumberGenerator):
 				argmin = i;
 	# search for the minimum entropy.
 	if argmin == -1:
-		collapsed_tiles = [];
-		collapsed_tiles.resize(total_tile_count);
 		for i in range(total_tile_count):
 			for _t in range(total_pattern_count):
 				if wave[i][_t]:
@@ -137,6 +135,7 @@ func observe(rng : RandomNumberGenerator):
 	for _t in range(total_pattern_count):
 		if w[_t] != (_t==r):
 			ban(argmin, _t);
+		#collapse tile
 	return null;
 
 func propagate() -> void:
@@ -225,6 +224,7 @@ func ban(i,_t) -> void:
 	stack_size+=1;
 
 	tile_possible_pattern_count[i] -= 1;
+	#if tppc == 1 collapse tile
 	tile_total_pattern_weights[i] -= weights[_t];
 	tile_pattern_log_weight_sums[i] -= log_weighted_sums[_t];
 
@@ -241,6 +241,7 @@ func clear() -> void:
 		tile_total_pattern_weights[i] = total_weights;
 		tile_pattern_log_weight_sums[i] = total_log_weighted_sums;
 		tile_pattern_entropies[i] = initial_entropy;
+		collapsed_tiles.resize(total_tile_count);
 
 	initialized_field = true;
 	generation_complete = false;
