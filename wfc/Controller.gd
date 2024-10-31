@@ -14,29 +14,6 @@ var time_stamp : int;
 
 var path : String = "res://tilesets/kenney/kenney_model2.tres";
 
-func _ready() -> void:
-	pass;
-	
-	
-	#defn_maker = Defn_Factory.new(sample_layer, Vector2(47, 22), "F", true, false);
-	#defn = defn_maker.setup();
-	#print_debug("Finished building definition.")
-	#print_debug(Time.get_ticks_msec());
-	#sample_layer.visible = false;
-	#ResourceSaver.save(defn_maker.new_definition, "res://test_rules.tres");
-	
-	#defn = load("res://tilesets/kenney/kenney_defn.tres");
-	#model = Tiled_Model.new(defn, 40, 23);
-	#model.setup();
-	#print_debug("Finished building rules.");
-	#print_debug(Time.get_ticks_msec());
-	#ResourceSaver.save(model, "res://tilesets/kenney/kenney_model.tres");
-	#model = load("res://tilesets/kenney/kenney_model.tres");
-	
-	#WFC.model = model;
-	#WFC.pre_initialize(rng, output_layer, true);
-	#print_debug(Time.get_ticks_msec());
-	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Refresh"):
 		if (first_run):
@@ -44,9 +21,7 @@ func _input(event: InputEvent) -> void:
 		print_debug("Beginning WFC!");
 		time_stamp = Time.get_ticks_msec();
 		WFC.pre_initialize(model, null);
-		
-		#Clear old tm sprites
-		tm.delete_all_blend_sprites();
+
 		tm = WFC.generate_with_time_machine()
 		if tm:
 			tm.animate_map(.001);
@@ -62,9 +37,11 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("wfc"):
 		run_wfc();
 	if event.is_action("tm_mv_forward"):
-		tm.moveForward();
+		if tm:
+			tm.move_forward();
 	if event.is_action("tm_mv_backward"):
-		tm.moveBackward();
+		if tm:
+			tm.move_backward();
 		
 func create_def() -> void:
 	print_debug("Beginning definition building!");
@@ -111,9 +88,3 @@ func run_wfc() -> void:
 		first_run = false;
 		print_debug("First run of WFC finished in:");
 		print_debug(Time.get_ticks_msec() - time_stamp);
-
-func run_wfc_solver() -> void:
-	var timestamp = Time.get_unix_time_from_system();
-	tm = WFC.generate_with_time_machine();
-	tm.draw_map();
-	print_debug("Solved WFC in " + str(Time.get_unix_time_from_system() - timestamp) + " seconds.");

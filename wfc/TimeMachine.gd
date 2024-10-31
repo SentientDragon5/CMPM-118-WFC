@@ -6,18 +6,16 @@ var current_frame: int = 0;
 # Tilemap data required to draw the tiles / sprites
 var tilemap: TileMapLayer = null;
 var tileset: TileSet = null;
-var map_size_x: int;
-var map_size_y: int;
+var map_size_x: int = -1;
+var map_size_y: int = -1;
 var tiles: Array = [];
-var node: Node;
+var node: Node = null;
+var timer: Timer = null;
 
-# Sprite data required to draw the blend sprites. Also has cache for textures because they are soooo slow
-var blend_sprite_array: Array = [];
-var tileDict: Dictionary = {};
+var drawn_items: Array = []; # Keeps track of all drawn items so we can clean up after ourselves
+var tile_texture_cache: Dictionary = {};
 
 var blend_shader = load("res://shaders/blend.gdshader");
-
-var timer;
 
 func _init(map_layer: TileMapLayer, new_tileset, new_tiles, size_x, size_y, parent_node) -> void:
 	tilemap = map_layer;
@@ -44,13 +42,13 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 	tilemap.tile_set = tileset;
 
 	# Get the collapsed tiles from the time capsule
-	var collapsed_tiles: Array = wfc_history[frame].collapsed;
+	var collapsed_tiles: Array = wfc_history[frame]._collapsed;
 
 	# Clear the tilemap and old sprites before redrawing
 	tilemap.clear();
-	delete_all_blend_sprites();
+	delete_all_drawn_items();
 	
-	var is_collapsed_complete = !collapsed_tiles.has(-1);
+	var is_collapsed_complete: bool = !collapsed_tiles.has(-1);
 
 	var index: int = 0
 	for tile_y in range(map_size_y):
@@ -64,16 +62,29 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 				# Draw from wave if not all tiles are collapsed
 				var possible_tiles: Array = wfc_history[frame].get_valid_tiles(index);
 				if possible_tiles.size() == 1:
+					# If only one tile is possible, draw it
 					var tile_data = tiles[possible_tiles[0]];
 					var transform = Global.cardinality_transformations.get(tile_data[1], 0);
 					tilemap.set_cell(Vector2i(tile_x, tile_y), 1, tile_data[0], transform);
-				else:
-					# Draw the sprites to represent the possible tiles
+				elif possible_tiles.size() > 1:
+					# if multiple tiles are possible, draw a blend of them
 					draw_blend_sprites(Vector2(tile_x+.5, tile_y+.5) * 64, possible_tiles);
+				else:
+					# If no tiles are possible, print a debug message and abort drawing
+					print_debug("No possible tiles at position: " + str(Vector2i(tile_x, tile_y)) + " at frame: " + str(frame) + " aborting draw");
+					
+					var fail_label = Label.new()
+					fail_label.text = "Generation Failed"
+					fail_label.scale = Vector2(10, 10)
+					fail_label.position = Vector2(200, 200) / 2
+					fail_label.set("theme_override_colors/font_color", Color(1, 0, 0))
+					node.add_child(fail_label)
+					drawn_items.append(fail_label);
+					return;
 			index += 1;
 
 
-func moveForward() -> void:
+func move_forward() -> void:
 	if timer:
 		timer.stop();
 	if current_frame < wfc_history.size() - 1:
@@ -83,7 +94,7 @@ func moveForward() -> void:
 	print_debug("Cannot go forward in time any further");
 
 
-func moveBackward() -> void:
+func move_backward() -> void:
 	if timer:
 		timer.stop();
 	if current_frame > 0:
@@ -108,45 +119,69 @@ func draw_blend_sprites(tile_pos: Vector2, possible_tiles: Array):
 	
 	#Apply the material and draw the sprite
 	blended_sprite.material = blend_material;
-	blend_sprite_array.append(blended_sprite);
+	drawn_items.append(blended_sprite);
 	node.add_child(blended_sprite);
 			
 
-func delete_all_blend_sprites():
-	if !blend_sprite_array.is_empty():
-		for sprite in blend_sprite_array:
+func delete_all_drawn_items():
+	if !drawn_items.is_empty():
+		for sprite in drawn_items:
 			if node.has_node(sprite.get_path()):
 				sprite.queue_free();
 				node.remove_child(sprite);
-		blend_sprite_array.clear();
+		drawn_items.clear();
 
 func get_cell_texture(coord:Vector2i) -> Texture:
-	if tileDict.get(coord) != null:
-		return tileDict.get(coord);
+	if tile_texture_cache.get(coord) != null:
+		return tile_texture_cache.get(coord);
 
 	var source:TileSetAtlasSource = tileset.get_source(1) as TileSetAtlasSource;
 	var rect := source.get_tile_texture_region(coord);
 	var image:Image = source.texture.get_image();
 	var tile_image := image.get_region(rect);
-	tileDict[coord] = ImageTexture.create_from_image(tile_image);
-	return tileDict[coord];
+	tile_texture_cache[coord] = ImageTexture.create_from_image(tile_image);
+	return tile_texture_cache[coord];
 
-func add_capsule() -> TimeCapsule:
-	var new_capsule = TimeCapsule.new();
+func add_capsule(collapsed_tiles, wfc_wave):
+	var new_capsule = TimeCapsule.new(collapsed_tiles, wfc_wave);
 	wfc_history.append(new_capsule);
 	current_frame += 1;
-	return new_capsule;
+
+func _notification(what):
+	# Destructor. Clean stuff up.
+	if (what == NOTIFICATION_PREDELETE):
+		# If node is empty, then we are probably exiting so we dont care
+		if !node.get_children():
+			return; 
+		
+		# Clear any drawn sprites
+		if !drawn_items.is_empty():
+			for sprite in drawn_items:
+				if node.has_node(sprite.get_path()):
+					sprite.queue_free();
+					node.remove_child(sprite);
+			drawn_items.clear();
+
+		#Delete the timer and remove it from node
+		if timer:
+			timer.stop();
+			node.remove_child(timer);
+			timer.queue_free();
 
 class TimeCapsule:
-	var collapsed: Array = [];
-	var wave: Array = [];
+	var _collapsed: Array = [];
+	var _wave: Array = [];
+
+	func _init(collapsed_tiles, wfc_wave):
+		_collapsed = collapsed_tiles;
+		_wave = wfc_wave;
 
 	#TILE POSITION STARTS FROM 0
 	func get_valid_tiles(tile_position: int):
 		var valid_tile_ids = [];
 
-		for i in wave[tile_position].size():
-			if wave[tile_position][i] == true:
+		for i in _wave[tile_position].size():
+			if _wave[tile_position][i] == true:
 				valid_tile_ids.append(i);
 
 		return valid_tile_ids;

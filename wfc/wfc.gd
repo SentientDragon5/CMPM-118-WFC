@@ -67,8 +67,6 @@ func clear_populated() -> void:
 	populated_output = false;
 	populated_tiles.resize(0);
 
-
-
 func initialize() -> void:
 	possible_pattern_weights = []; # of t length
 	possible_pattern_weights.resize(model.num_patterns);
@@ -316,9 +314,10 @@ func ban_pop_tiles() -> void:
 		
 func add_tm_entry():
 	if time_machine:
-		var tmp = time_machine.add_capsule();
-		tmp.collapsed = collapsed_tiles.duplicate(true);
-		tmp.wave = wave.duplicate(true);
+		time_machine.add_capsule(
+			collapsed_tiles.duplicate(true),
+			wave.duplicate(true)
+		);
 
 func _drawTileIDs() -> void: #for debugging
 	for i in range(16):
