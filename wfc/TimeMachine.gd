@@ -35,11 +35,13 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 	# Clear the tilemap and old sprites before redrawing
 	tilemap.clear();
 	delete_all_blend_sprites();
+	
+	var is_collapsed_complete = !collapsed_tiles.has(-1);
 
 	var index: int = 0
 	for tile_y in range(map_size_y):
 		for tile_x in range(map_size_x):
-			if !collapsed_tiles.is_empty() and !collapsed_tiles.has(-1):
+			if !collapsed_tiles.is_empty() and is_collapsed_complete:
 				# Draw directly if all tiles are collapsed
 				var tile_data = tiles[collapsed_tiles[index]];
 				var transform = Global.cardinality_transformations.get(tile_data[1], 0);
@@ -69,20 +71,6 @@ func moveBackward() -> void:
 		draw_map(current_frame);
 		return;
 	print_debug("Cannot go back in time any further");
-	
-func delete_history():
-	wfc_history = [];
-	current_frame = 0;
-
-	# Tilemap data required to draw the tiles / sprites
-	tilemap = null;
-	tileset = null;
-	tiles = [];
-	node = null; 
-
-	# Sprite data required to draw the blend sprites. Also has cache for textures because they are soooo slow
-	blend_sprite_array = [];
-	tileDict= {};
 
 func draw_blend_sprites(tile_pos: Vector2, possible_tiles: Array):
 	#Create sprite at location of the missing tile

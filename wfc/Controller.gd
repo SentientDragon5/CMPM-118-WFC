@@ -43,11 +43,13 @@ func _input(event: InputEvent) -> void:
 			return
 		print_debug("Beginning WFC!");
 		time_stamp = Time.get_ticks_msec();
-		var new_rng = RandomNumberGenerator.new();
 		WFC.pre_initialize(model, null);
 		
-		if !!WFC.generate(new_rng):
-			WFC.drawTiles();
+		#Clear old tm sprites
+		tm.delete_all_blend_sprites();
+		tm = WFC.generate_with_time_machine()
+		if tm:
+			tm.draw_map();
 		
 		print_debug("Run of WFC finished in:");
 		print_debug(Time.get_ticks_msec() - time_stamp);
@@ -59,9 +61,9 @@ func _input(event: InputEvent) -> void:
 		create_special_model();
 	if event.is_action_pressed("wfc"):
 		run_wfc();
-	if event.is_action_pressed("tm_mv_forward"):
+	if event.is_action("tm_mv_forward"):
 		tm.moveForward();
-	if event.is_action_pressed("tm_mv_backward"):
+	if event.is_action("tm_mv_backward"):
 		tm.moveBackward();
 		
 func create_def() -> void:
@@ -105,7 +107,7 @@ func run_wfc() -> void:
 		WFC.populate_WFC(output_layer);
 		tm = WFC.generate_with_time_machine()
 		if tm:
-			WFC.drawTiles();
+			tm.draw_map();
 		first_run = false;
 		print_debug("First run of WFC finished in:");
 		print_debug(Time.get_ticks_msec() - time_stamp);

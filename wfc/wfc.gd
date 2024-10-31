@@ -232,8 +232,6 @@ func generate(rng_seed : String = "") -> bool:
 	
 func generate_with_time_machine(rng_seed : String = "") -> TimeMachine:
 	if time_machine:
-		time_machine.delete_history();
-		time_machine.unreference();
 		time_machine = null;
 
 	time_machine = TimeMachine.new(
@@ -322,7 +320,7 @@ func add_tm_entry():
 		tmp.collapsed = collapsed_tiles.duplicate(true);
 		tmp.wave = wave.duplicate(true);
 
-func drawTileIDs() -> void: #for debugging
+func _drawTileIDs() -> void: #for debugging
 	for i in range(16):
 		for j in range(16):
 			var text = Label.new();
@@ -331,7 +329,7 @@ func drawTileIDs() -> void: #for debugging
 			get_tree().get_root().call_deferred("add_child", text);
 
 # Use the time machine version if possible!
-func drawTiles() -> void:
+func _drawTiles() -> void:
 	output.tile_set = model.rules_definition.tileset;
 	const cardinality_transformations = Global.cardinality_transformations;
 
