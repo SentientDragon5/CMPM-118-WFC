@@ -17,6 +17,8 @@ var tileDict: Dictionary = {};
 
 var blend_shader = load("res://shaders/blend.gdshader");
 
+var timer;
+
 func _init(map_layer: TileMapLayer, new_tileset, new_tiles, size_x, size_y, parent_node) -> void:
 	tilemap = map_layer;
 	tileset = new_tileset;
@@ -24,6 +26,18 @@ func _init(map_layer: TileMapLayer, new_tileset, new_tiles, size_x, size_y, pare
 	map_size_x = size_x;
 	map_size_y = size_y;
 	node = parent_node;
+
+#Animates the WFC algorithm according to captured history
+func animate_map(slp_time):
+	timer = Timer.new();
+	timer.wait_time = slp_time;
+	node.add_child(timer);
+	timer.start();
+	for i in range(wfc_history.size()):
+		await timer.timeout;
+		current_frame = i;
+		draw_map(i);
+	timer.stop();
 
 #Replaces the timemachine's tilemap with the output of the wfc algoritm at a given frame
 func draw_map(frame: int = wfc_history.size() - 1) -> void:
@@ -55,17 +69,23 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 					tilemap.set_cell(Vector2i(tile_x, tile_y), 1, tile_data[0], transform);
 				else:
 					# Draw the sprites to represent the possible tiles
-					draw_blend_sprites(Vector2(tile_x+.5,tile_y+.5) * 64, possible_tiles);
+					draw_blend_sprites(Vector2(tile_x+.5, tile_y+.5) * 64, possible_tiles);
 			index += 1;
 
+
 func moveForward() -> void:
+	if timer:
+		timer.stop();
 	if current_frame < wfc_history.size() - 1:
 		current_frame += 1;
 		draw_map(current_frame);
 		return;
 	print_debug("Cannot go forward in time any further");
 
+
 func moveBackward() -> void:
+	if timer:
+		timer.stop();
 	if current_frame > 0:
 		current_frame -= 1;
 		draw_map(current_frame);

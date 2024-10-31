@@ -49,7 +49,7 @@ func _input(event: InputEvent) -> void:
 		tm.delete_all_blend_sprites();
 		tm = WFC.generate_with_time_machine()
 		if tm:
-			tm.draw_map();
+			tm.animate_map(.001);
 		
 		print_debug("Run of WFC finished in:");
 		print_debug(Time.get_ticks_msec() - time_stamp);
@@ -107,7 +107,7 @@ func run_wfc() -> void:
 		WFC.populate_WFC(output_layer);
 		tm = WFC.generate_with_time_machine()
 		if tm:
-			tm.draw_map();
+			tm.animate_map(.001);
 		first_run = false;
 		print_debug("First run of WFC finished in:");
 		print_debug(Time.get_ticks_msec() - time_stamp);
