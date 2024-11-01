@@ -14,6 +14,8 @@ var time_stamp : int;
 
 var path : String = "res://tilesets/kenney/kenney_model2.tres";
 
+var wfc_has_been_started = false;
+
 func _ready() -> void:
 	pass;
 	
@@ -60,11 +62,16 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("AGAHHAHA"):
 		create_special_model();
 	if event.is_action_pressed("wfc"):
+		wfc_has_been_started = true;
 		run_wfc();
 	if event.is_action("tm_mv_forward"):
-		tm.moveForward();
+		if wfc_has_been_started:
+			tm.moveForward();
 	if event.is_action("tm_mv_backward"):
-		tm.moveBackward();
+		if wfc_has_been_started:
+			tm.moveBackward();
+	if event.is_action("quit"):
+		get_tree().quit()
 		
 func create_def() -> void:
 	print_debug("Beginning definition building!");
@@ -117,3 +124,30 @@ func run_wfc_solver() -> void:
 	tm = WFC.generate_with_time_machine();
 	tm.draw_map();
 	print_debug("Solved WFC in " + str(Time.get_unix_time_from_system() - timestamp) + " seconds.");
+
+
+func _on_definition_button_down() -> void:
+	create_def();
+
+
+func _on_tiled_button_down() -> void:
+	create_tiled_model();
+
+
+func _on_special_button_down() -> void:
+	create_special_model()
+
+
+func _on_run_wfc_button_down() -> void:
+	wfc_has_been_started = true;
+	run_wfc()
+
+
+func _on_step_back_button_down() -> void:
+	if wfc_has_been_started:
+		tm.moveBackward();
+
+
+func _on_step_forward_button_down() -> void:
+	if wfc_has_been_started:
+		tm.moveForward();

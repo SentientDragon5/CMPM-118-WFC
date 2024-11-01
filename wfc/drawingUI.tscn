@@ -1,11 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://b46n3ht1t4wco"]
+[gd_scene load_steps=2 format=3 uid="uid://b46n3ht1t4wco"]
 
-[ext_resource type="Texture2D" uid="uid://bmf2t4c7tjdcf" path="res://tilesets/kenney/mapPack_spritesheet.png" id="1_6lcyx"]
 [ext_resource type="Script" path="res://drawing_ui.gd" id="1_njk1w"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mlf07"]
-atlas = ExtResource("1_6lcyx")
-region = Rect2(0, 0, 64, 64)
 
 [node name="DrawingUI" type="Control"]
 layout_mode = 3
@@ -23,18 +18,47 @@ offset_top = 21.625
 offset_right = 80.485
 offset_bottom = 256.625
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="Hide" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Apply"
+text = "Hide / Show Menu (M)"
 
-[node name="TextureButton" type="TextureButton" parent="VBoxContainer"]
+[node name="Label3" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_mlf07")
+text = "Running"
+horizontal_alignment = 1
 
-[node name="TextureButton2" type="TextureButton" parent="VBoxContainer"]
+[node name="Definition" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_mlf07")
+text = "Definition (0)"
 
-[node name="TextureButton3" type="TextureButton" parent="VBoxContainer"]
+[node name="Tiled" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_mlf07")
+text = "Tiled Model (1)"
+
+[node name="Special" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Special Model (2)"
+
+[node name="RunWFC" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Run WFC (3)"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StepBack" type="Button" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+text = "Step Back (Q)"
+
+[node name="StepForward" type="Button" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+text = "Step Forward (W)"
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Painting"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Left click to paint, Right to erase."

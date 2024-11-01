@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="Special_Rules" load_steps=3 format=3 uid="uid://osq40hw5jwyc"]
+[gd_resource type="Resource" script_class="Special_Rules" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://special_tiled_rules.gd" id="1_n77mg"]
-[ext_resource type="TileSet" uid="uid://8giodelfx3tb" path="res://tilesets/kenney/kenney.tres" id="2_3jeb2"]
+[ext_resource type="TileSet" path="res://tilesets/kenney/kenney.tres" id="2_3jeb2"]
 
 [resource]
 script = ExtResource("1_n77mg")
