@@ -11,10 +11,15 @@ const cardinality_transformations: Dictionary = {
 	7: TileSetAtlasSource.TRANSFORM_TRANSPOSE
 }
 
+const decoratable_tiles: Dictionary = {
+										  Vector2(12, 2): [Vector2(10, 12), Vector2(9, 12), Vector2(9, 11)], # Grass
+										  Vector2(12, 7): [Vector2(10, 13), Vector2(6, 8)], # Sand
+										  Vector2(7, 12): [Vector2(10, 13), Vector2(11, 4)], # Dirt
+									  };
 
 func _ready() -> void:
 	pass;
-	
+
 func _draw_debug_tiles(tiles : Array) -> void:
 	#1 rot TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
 	#2 rot TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
@@ -31,15 +36,15 @@ func _draw_debug_tiles(tiles : Array) -> void:
 				cardinality = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V;
 			2:
 				cardinality = TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V;
-			3: 
+			3:
 				cardinality = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H;
-			4: 
+			4:
 				cardinality = TileSetAtlasSource.TRANSFORM_FLIP_H;
-			5: 
+			5:
 				cardinality = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
 			6:
 				cardinality = TileSetAtlasSource.TRANSFORM_FLIP_V
-			7: 
+			7:
 				cardinality = TileSetAtlasSource.TRANSFORM_TRANSPOSE
 		print_debug(cardinality);
 		test_tilemap.set_cell(Vector2(0, posX), 0, tile[0], cardinality);

@@ -17,6 +17,8 @@ var tile_texture_cache: Dictionary = {};
 
 var blend_shader = load("res://shaders/blend.gdshader");
 
+var decor_seed: int = -1;
+
 func _init(map_layer: TileMapLayer, new_tileset, new_tiles, size_x, size_y, parent_node) -> void:
 	tilemap = map_layer;
 	tileset = new_tileset;
@@ -24,6 +26,7 @@ func _init(map_layer: TileMapLayer, new_tileset, new_tiles, size_x, size_y, pare
 	map_size_x = size_x;
 	map_size_y = size_y;
 	node = parent_node;
+	decor_seed = RandomNumberGenerator.new().randi();
 
 #Animates the WFC algorithm according to captured history
 func animate_map(slp_time):
@@ -58,6 +61,7 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 				var tile_data = tiles[collapsed_tiles[index]];
 				var transform = Global.cardinality_transformations.get(tile_data[1], 0);
 				tilemap.set_cell(Vector2i(tile_x, tile_y), 1, tile_data[0], transform);
+				draw_decor_sprite(Vector2(tile_x, tile_y), tile_data[0]);
 			else:
 				# Draw from wave if not all tiles are collapsed
 				var possible_tiles: Array = wfc_history[frame].get_valid_tiles(index);
@@ -66,6 +70,7 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 					var tile_data = tiles[possible_tiles[0]];
 					var transform = Global.cardinality_transformations.get(tile_data[1], 0);
 					tilemap.set_cell(Vector2i(tile_x, tile_y), 1, tile_data[0], transform);
+					draw_decor_sprite(Vector2(tile_x, tile_y), tile_data[0]);
 				elif possible_tiles.size() > 1:
 					# if multiple tiles are possible, draw a blend of them
 					draw_blend_sprites(Vector2(tile_x+.5, tile_y+.5) * 64, possible_tiles);
@@ -83,6 +88,20 @@ func draw_map(frame: int = wfc_history.size() - 1) -> void:
 					return;
 			index += 1;
 
+func draw_decor_sprite(tile_pos, tile_data):
+	var decor_tiles = Global.decoratable_tiles.get(tile_data)
+	if decor_tiles:
+		var rng = RandomNumberGenerator.new()
+		rng.seed = decor_seed * int(tile_pos.x) / int(tile_pos.y + 1)
+		if rng.randf() < 0.1:  # 10% chance to place a tile
+			var decor_sprite: Sprite2D = Sprite2D.new()
+			decor_sprite.position = tile_pos * 64 + Vector2(32, 32)
+			decor_sprite.scale = Vector2(1, 1)
+			decor_sprite.texture = get_cell_texture(decor_tiles[rng.randi() % decor_tiles.size()])
+			drawn_items.append(decor_sprite)
+			node.add_child(decor_sprite)
+			decor_sprite.z_index = 5
+		
 
 func move_forward() -> void:
 	if timer:
