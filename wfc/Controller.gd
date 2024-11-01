@@ -14,6 +14,9 @@ var time_stamp : int;
 
 var path : String = "res://tilesets/kenney/kenney_model2.tres";
 
+func _ready() -> void:
+	run_wfc();
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Refresh"):
 		if (first_run):
