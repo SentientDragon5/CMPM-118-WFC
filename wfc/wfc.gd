@@ -142,7 +142,6 @@ func observe(rng : RandomNumberGenerator):
 	for _t in range(total_pattern_count):
 		if w[_t] != (_t==r):
 			ban(argmin, _t);
-		#collapse tile
 	return null;
 
 func propagate() -> void:
@@ -185,8 +184,7 @@ func propagate() -> void:
 
 func singleIteration(rng : RandomNumberGenerator):
 	var result = observe(rng);
-	#TODO Is this the best place to do this?
-	add_tm_entry();
+	#add_tm_entry();
 	if result != null:
 		generation_complete = result;
 		return result;
@@ -255,6 +253,8 @@ func ban(i,_t) -> void:
 
 	tile_possible_pattern_count[i] -= 1;
 	#if tppc == 1 collapse tile
+	if tile_possible_pattern_count[i] == 1:
+		add_tm_entry();
 	tile_total_pattern_weights[i] -= weights[_t];
 	tile_pattern_log_weight_sums[i] -= log_weighted_sums[_t];
 

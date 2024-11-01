@@ -12,6 +12,8 @@ var tiles: Array = [];
 var node: Node = null;
 var timer: Timer = null;
 
+var playback_speed : int = 4;
+
 var drawn_items: Array = []; # Keeps track of all drawn items so we can clean up after ourselves
 var tile_texture_cache: Dictionary = {};
 
@@ -34,10 +36,13 @@ func animate_map(slp_time):
 	timer.wait_time = slp_time;
 	node.add_child(timer);
 	timer.start();
-	for i in range(wfc_history.size()):
+	current_frame = 0;
+	while current_frame < wfc_history.size() - playback_speed:
 		await timer.timeout;
-		current_frame = i;
-		draw_map(i);
+		draw_map(current_frame);
+		current_frame += playback_speed;
+	current_frame = wfc_history.size() - 1;
+	draw_map(current_frame);
 	timer.stop();
 
 #Replaces the timemachine's tilemap with the output of the wfc algoritm at a given frame
@@ -92,6 +97,7 @@ func draw_decor_sprite(tile_pos, tile_data):
 	var decor_tiles = Global.decoratable_tiles.get(tile_data)
 	if decor_tiles:
 		var rng = RandomNumberGenerator.new()
+		@warning_ignore("integer_division")
 		rng.seed = decor_seed * int(tile_pos.x) / int(tile_pos.y + 1)
 		if rng.randf() < 0.1:  # 10% chance to place a tile
 			var decor_sprite: Sprite2D = Sprite2D.new()
