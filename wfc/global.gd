@@ -12,9 +12,10 @@ const cardinality_transformations: Dictionary = {
 }
 
 const decoratable_tiles: Dictionary = {
-										  Vector2(12, 2): [Vector2(10, 12), Vector2(9, 12), Vector2(9, 11)], # Grass
-										  Vector2(12, 7): [Vector2(10, 13), Vector2(6, 8)], # Sand
-										  Vector2(7, 12): [Vector2(10, 13), Vector2(11, 4)], # Dirt
+									Vector2(12, 2): [Vector2(10, 12), Vector2(9, 12), Vector2(9, 11)], # Grass
+									Vector2(12, 7): [Vector2(10, 13), Vector2(6, 8)], # Sand
+									Vector2(7, 12): [Vector2(10, 13), Vector2(11, 4), Vector2(6, 4)], # Dirt
+									Vector2(0, 4): [Vector2(9, 7)]
 									  };
 
 func _ready() -> void:

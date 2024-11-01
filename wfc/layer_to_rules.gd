@@ -68,7 +68,6 @@ func get_neighbors() -> void:#currently generates redundant rules
 			if x < sample_size.x - 1: 
 				var neighbor : int = tilemap_as_data[x+1][y];
 				is_rule_unique(cur_tile, neighbor, DIRECTIONS.LEFT);
-				
 			elif periodic:
 				var neighbor : int = tilemap_as_data[0][y];
 				is_rule_unique(cur_tile, neighbor, DIRECTIONS.LEFT);
@@ -76,7 +75,6 @@ func get_neighbors() -> void:#currently generates redundant rules
 			if y < sample_size.y - 1:
 				var neighbor : int = tilemap_as_data[x][y+1];
 				is_rule_unique(cur_tile, neighbor, DIRECTIONS.UP);
-				
 			elif periodic:
 				var neighbor : int = tilemap_as_data[x][0];
 				is_rule_unique(cur_tile, neighbor, DIRECTIONS.UP);

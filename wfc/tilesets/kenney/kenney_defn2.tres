@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Special_Rules" load_steps=3 format=3 uid="uid://osq40hw5jwyc"]
 
-[ext_resource type="Script" path="res://special_tiled_rules.gd" id="1_n77mg"]
-[ext_resource type="TileSet" uid="uid://8giodelfx3tb" path="res://tilesets/kenney/kenney.tres" id="2_3jeb2"]
+[ext_resource type="Script" path="res://special_tiled_rules.gd" id="1_dfyqi"]
+[ext_resource type="TileSet" uid="uid://8giodelfx3tb" path="res://tilesets/kenney/kenney.tres" id="2_0hb1k"]
 
 [resource]
-script = ExtResource("1_n77mg")
+script = ExtResource("1_dfyqi")
 tile_id_of = {
 "0,0 0": 19,
 "0,1 0": 25,
@@ -12,29 +12,29 @@ tile_id_of = {
 "0,3 0": 31,
 "0,4 0": 23,
 "10,0 0": 5,
-"10,1 0": 30,
+"10,1 0": 27,
 "10,4 0": 36,
 "10,5 0": 22,
-"10,6 0": 27,
+"10,6 0": 29,
 "11,13 0": 34,
 "12,0 0": 11,
 "12,1 0": 10,
 "12,2 0": 2,
-"12,3 0": 29,
+"12,3 0": 35,
 "12,4 0": 32,
 "12,5 0": 21,
 "12,6 0": 20,
 "12,7 0": 0,
 "12,8 0": 33,
-"13,0 0": 35,
+"13,0 0": 30,
 "13,1 0": 17,
 "13,2 0": 9,
 "13,3 0": 1,
-"13,4 0": 28,
+"13,4 0": 26,
 "5,10 0": 39,
 "5,11 0": 4,
 "5,9 0": 16,
-"6,9 0": 26,
+"6,9 0": 28,
 "7,10 0": 14,
 "7,11 0": 13,
 "7,12 0": 38,
@@ -47,7 +47,7 @@ tile_id_of = {
 "9,0 0": 3,
 "9,13 0": 18
 }
-tileset = ExtResource("2_3jeb2")
+tileset = ExtResource("2_0hb1k")
 periodic = false
 tiles = Array[Dictionary]([{
 "atlas_coords": Vector2(12, 7),
@@ -154,6 +154,14 @@ tiles = Array[Dictionary]([{
 "cardinality": 0,
 "weight": 1
 }, {
+"atlas_coords": Vector2(13, 4),
+"cardinality": 0,
+"weight": 1
+}, {
+"atlas_coords": Vector2(10, 1),
+"cardinality": 0,
+"weight": 1
+}, {
 "atlas_coords": Vector2(6, 9),
 "cardinality": 0,
 "weight": 1
@@ -162,15 +170,7 @@ tiles = Array[Dictionary]([{
 "cardinality": 0,
 "weight": 1
 }, {
-"atlas_coords": Vector2(13, 4),
-"cardinality": 0,
-"weight": 1
-}, {
-"atlas_coords": Vector2(12, 3),
-"cardinality": 0,
-"weight": 1
-}, {
-"atlas_coords": Vector2(10, 1),
+"atlas_coords": Vector2(13, 0),
 "cardinality": 0,
 "weight": 1
 }, {
@@ -190,7 +190,7 @@ tiles = Array[Dictionary]([{
 "cardinality": 0,
 "weight": 1
 }, {
-"atlas_coords": Vector2(13, 0),
+"atlas_coords": Vector2(12, 3),
 "cardinality": 0,
 "weight": 1
 }, {
@@ -564,24 +564,20 @@ neighbors = Array[Dictionary]([{
 "tile2": 21
 }, {
 "direction": 0,
-"tile1": 22,
+"tile1": 0,
 "tile2": 26
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 27
+}, {
+"direction": 0,
+"tile1": 22,
+"tile2": 28
 }, {
 "direction": 0,
 "tile1": 23,
-"tile2": 27
-}, {
-"direction": 0,
-"tile1": 0,
-"tile2": 28
-}, {
-"direction": 0,
-"tile1": 0,
 "tile2": 29
-}, {
-"direction": 0,
-"tile1": 0,
-"tile2": 30
 }, {
 "direction": 3,
 "tile1": 0,
@@ -589,7 +585,7 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 0,
 "tile1": 26,
-"tile2": 0
+"tile2": 1
 }, {
 "direction": 3,
 "tile1": 26,
@@ -597,11 +593,11 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 0,
 "tile1": 27,
-"tile2": 22
+"tile2": 30
 }, {
 "direction": 3,
 "tile1": 27,
-"tile2": 23
+"tile2": 0
 }, {
 "direction": 3,
 "tile1": 0,
@@ -609,7 +605,7 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 0,
 "tile1": 28,
-"tile2": 1
+"tile2": 0
 }, {
 "direction": 3,
 "tile1": 28,
@@ -617,19 +613,27 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 0,
 "tile1": 29,
-"tile2": 2
+"tile2": 22
 }, {
 "direction": 3,
 "tile1": 29,
+"tile2": 23
+}, {
+"direction": 3,
+"tile1": 1,
 "tile2": 30
 }, {
 "direction": 0,
 "tile1": 30,
-"tile2": 5
+"tile2": 2
 }, {
 "direction": 3,
 "tile1": 30,
-"tile2": 0
+"tile2": 27
+}, {
+"direction": 0,
+"tile1": 27,
+"tile2": 5
 }, {
 "direction": 0,
 "tile1": 23,
@@ -640,8 +644,8 @@ neighbors = Array[Dictionary]([{
 "tile2": 32
 }, {
 "direction": 0,
-"tile1": 27,
-"tile2": 26
+"tile1": 29,
+"tile2": 28
 }, {
 "direction": 0,
 "tile1": 23,
@@ -673,7 +677,7 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 0,
 "tile1": 5,
-"tile2": 35
+"tile2": 30
 }, {
 "direction": 0,
 "tile1": 31,
@@ -696,7 +700,7 @@ neighbors = Array[Dictionary]([{
 "tile2": 32
 }, {
 "direction": 3,
-"tile1": 28,
+"tile1": 26,
 "tile2": 34
 }, {
 "direction": 0,
@@ -709,6 +713,18 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 3,
 "tile1": 2,
+"tile2": 30
+}, {
+"direction": 0,
+"tile1": 0,
+"tile2": 35
+}, {
+"direction": 0,
+"tile1": 26,
+"tile2": 34
+}, {
+"direction": 3,
+"tile1": 26,
 "tile2": 35
 }, {
 "direction": 0,
@@ -717,50 +733,66 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 3,
 "tile1": 35,
-"tile2": 30
+"tile2": 35
 }, {
 "direction": 3,
-"tile1": 29,
-"tile2": 29
-}, {
-"direction": 3,
-"tile1": 29,
+"tile1": 35,
 "tile2": 34
 }, {
-"direction": 3,
+"direction": 0,
 "tile1": 26,
+"tile2": 9
+}, {
+"direction": 0,
+"tile1": 34,
+"tile2": 11
+}, {
+"direction": 3,
+"tile1": 28,
 "tile2": 33
+}, {
+"direction": 0,
+"tile1": 11,
+"tile2": 1
 }, {
 "direction": 3,
 "tile1": 11,
 "tile2": 17
 }, {
 "direction": 0,
+"tile1": 17,
+"tile2": 5
+}, {
+"direction": 0,
 "tile1": 0,
 "tile2": 19
 }, {
-"direction": 0,
-"tile1": 30,
-"tile2": 35
+"direction": 3,
+"tile1": 35,
+"tile2": 27
 }, {
 "direction": 3,
-"tile1": 9,
-"tile2": 18
+"tile1": 1,
+"tile2": 5
 }, {
 "direction": 0,
 "tile1": 19,
 "tile2": 36
 }, {
 "direction": 3,
-"tile1": 35,
-"tile2": 29
+"tile1": 30,
+"tile2": 35
 }, {
 "direction": 0,
-"tile1": 29,
+"tile1": 35,
 "tile2": 17
 }, {
 "direction": 0,
-"tile1": 30,
+"tile1": 27,
+"tile2": 18
+}, {
+"direction": 3,
+"tile1": 9,
 "tile2": 18
 }, {
 "direction": 3,
@@ -777,7 +809,7 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 3,
 "tile1": 33,
-"tile2": 27
+"tile2": 29
 }, {
 "direction": 0,
 "tile1": 22,
@@ -789,11 +821,11 @@ neighbors = Array[Dictionary]([{
 }, {
 "direction": 0,
 "tile1": 19,
-"tile2": 26
+"tile2": 28
 }, {
 "direction": 0,
 "tile1": 36,
-"tile2": 27
+"tile2": 29
 }, {
 "direction": 0,
 "tile1": 3,
@@ -912,10 +944,10 @@ neighbors = Array[Dictionary]([{
 "tile2": 38
 }, {
 "direction": 0,
-"tile1": 26,
+"tile1": 28,
 "tile2": 19
 }, {
 "direction": 0,
-"tile1": 27,
+"tile1": 29,
 "tile2": 36
 }])
