@@ -48,6 +48,10 @@ tile_set = ExtResource("3_rklda")
 tilemap = NodePath("..")
 cursor = NodePath("Sprite2D")
 
+[node name="Weighting" type="Button" parent="new_ouput/DrawingUI/VBoxContainer" index="7"]
+layout_mode = 2
+text = "Change Weighting (E)"
+
 [node name="Sprite2D" type="Sprite2D" parent="new_ouput/DrawingUI"]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("5_fj7p1")
@@ -66,6 +70,7 @@ sample_layer = NodePath("../../new_ouput")
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/Special" to="." method="_on_special_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/RunWFC" to="." method="_on_run_wfc_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/Regen" to="." method="_on_regen_button_down"]
+[connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/Weighting" to="." method="_on_weighting_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/HSplitContainer/StepBack" to="." method="_on_step_back_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/HSplitContainer/StepForward" to="." method="_on_step_forward_button_down"]
 

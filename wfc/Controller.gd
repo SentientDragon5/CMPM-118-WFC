@@ -12,6 +12,8 @@ var tm: TimeMachine;
 var first_run : bool = true;
 var time_stamp : int;
 
+var weight_even : bool = true;
+
 var path : String = "res://tilesets/kenney/kenney_model2.tres";
 
 func _ready() -> void:
@@ -43,6 +45,8 @@ func _input(event: InputEvent) -> void:
 		create_special_model();
 	if event.is_action_pressed("wfc"):
 		run_wfc();
+	if event.is_action_pressed("weighting"):
+		weight_even = !weight_even;
 	if event.is_action("tm_mv_forward"):
 		if tm:
 			tm.move_forward();
@@ -55,7 +59,7 @@ func _input(event: InputEvent) -> void:
 func create_def() -> void:
 	print_debug("Beginning definition building!");
 	time_stamp = Time.get_ticks_msec();
-	defn_maker = Defn_Factory.new(sample_layer, Vector2(47, 22), true, false);
+	defn_maker = Defn_Factory.new(sample_layer, Vector2(47, 22), weight_even, false);
 	defn = defn_maker.setup();
 	ResourceSaver.save(defn_maker.new_definition, "res://tilesets/kenney/kenney_defn2.tres");
 	print_debug("Finished building definition in:");
@@ -133,3 +137,7 @@ func _on_step_forward_button_down() -> void:
 
 func _on_regen_button_down() -> void:
 	refresh()
+
+
+func _on_weighting_button_down() -> void:
+	weight_even = !weight_even;
