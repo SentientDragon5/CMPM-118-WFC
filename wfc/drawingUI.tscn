@@ -43,6 +43,10 @@ text = "Special Model (2)"
 layout_mode = 2
 text = "Run WFC (3)"
 
+[node name="Regen" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Regen (R)"
+
 [node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
 layout_mode = 2
 

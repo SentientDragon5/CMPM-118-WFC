@@ -38,23 +38,24 @@ func _ready() -> void:
 	#WFC.model = model;
 	#WFC.pre_initialize(rng, output_layer, true);
 	#print_debug(Time.get_ticks_msec());
-	
+
+func refresh():
+	if (first_run):
+		return
+	print_debug("Beginning WFC!");
+	time_stamp = Time.get_ticks_msec();
+	WFC.pre_initialize(model, null);
+	#Clear old tm sprites
+	tm.delete_all_blend_sprites();
+	tm = WFC.generate_with_time_machine()
+	if tm:
+		tm.animate_map(.001);
+	print_debug("Run of WFC finished in:");
+	print_debug(Time.get_ticks_msec() - time_stamp);
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Refresh"):
-		if (first_run):
-			return
-		print_debug("Beginning WFC!");
-		time_stamp = Time.get_ticks_msec();
-		WFC.pre_initialize(model, null);
-		
-		#Clear old tm sprites
-		tm.delete_all_blend_sprites();
-		tm = WFC.generate_with_time_machine()
-		if tm:
-			tm.animate_map(.001);
-		
-		print_debug("Run of WFC finished in:");
-		print_debug(Time.get_ticks_msec() - time_stamp);
+		refresh()
 	if event.is_action_pressed("definition"):
 		create_def();
 	if event.is_action_pressed("model"):
@@ -151,3 +152,7 @@ func _on_step_back_button_down() -> void:
 func _on_step_forward_button_down() -> void:
 	if wfc_has_been_started:
 		tm.moveForward();
+
+
+func _on_regen_button_down() -> void:
+	refresh()
