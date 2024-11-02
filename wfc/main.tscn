@@ -65,6 +65,7 @@ sample_layer = NodePath("../../new_ouput")
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/Tiled" to="." method="_on_tiled_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/Special" to="." method="_on_special_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/RunWFC" to="." method="_on_run_wfc_button_down"]
+[connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/Regen" to="." method="_on_regen_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/HSplitContainer/StepBack" to="." method="_on_step_back_button_down"]
 [connection signal="button_down" from="new_ouput/DrawingUI/VBoxContainer/HSplitContainer/StepForward" to="." method="_on_step_forward_button_down"]
 
