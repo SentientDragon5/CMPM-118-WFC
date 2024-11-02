@@ -14,8 +14,6 @@ var time_stamp : int;
 
 var path : String = "res://tilesets/kenney/kenney_model2.tres";
 
-var wfc_has_been_started = false;
-
 func _ready() -> void:
 	run_wfc();
 
@@ -40,7 +38,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("AGAHHAHA"):
 		create_special_model();
 	if event.is_action_pressed("wfc"):
-		wfc_has_been_started = true;
 		run_wfc();
 	if event.is_action("tm_mv_forward"):
 		if tm:
@@ -48,11 +45,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action("tm_mv_backward"):
 		if tm:
 			tm.move_backward();
-		if wfc_has_been_started:
-			tm.moveForward();
-	if event.is_action("tm_mv_backward"):
-		if wfc_has_been_started:
-			tm.moveBackward();
 	if event.is_action("quit"):
 		get_tree().quit()
 		
@@ -122,15 +114,14 @@ func _on_special_button_down() -> void:
 
 
 func _on_run_wfc_button_down() -> void:
-	wfc_has_been_started = true;
 	run_wfc()
 
 
 func _on_step_back_button_down() -> void:
-	if wfc_has_been_started:
+	if tm:
 		tm.moveBackward();
 
 
 func _on_step_forward_button_down() -> void:
-	if wfc_has_been_started:
+	if tm:
 		tm.moveForward();
